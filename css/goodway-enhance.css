@@ -159,6 +159,80 @@ body .paragraph.bold-lime-green {
 }
 
 /* ==========================================================================
+   HERMA callout — featured-authorised-distributor block on Office Equipment
+   ========================================================================== */
+.gw-herma-callout {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.6fr);
+  gap: clamp(28px, 5vw, 56px);
+  align-items: center;
+  background: linear-gradient(135deg, #fdfaf1 0%, #f3eddb 100%);
+  border: 1px solid rgba(0, 103, 177, 0.18);
+  border-radius: 22px;
+  padding: clamp(28px, 5vw, 56px);
+  position: relative;
+  overflow: hidden;
+}
+.gw-herma-callout::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0067b1 0%, #f6a200 100%);
+}
+.gw-herma-callout__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px 36px;
+  box-shadow: 0 8px 24px rgba(14, 26, 43, 0.08);
+}
+.gw-herma-callout__logo img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.gw-herma-callout__body { min-width: 0; }
+.gw-herma-callout__bullets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 28px;
+  margin: 18px 0 22px;
+  padding: 0;
+  list-style: none;
+}
+.gw-herma-callout__bullets li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--gw-text, #3a4253);
+}
+.gw-herma-callout__bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 9px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #0067b1;
+  opacity: 0.75;
+}
+.gw-herma-callout__bullets li strong { color: var(--gw-navy, #0e1a2b); }
+.gw-herma-callout__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+@media (max-width: 991px) {
+  .gw-herma-callout { grid-template-columns: 1fr; gap: 24px; }
+  .gw-herma-callout__logo { padding: 22px 28px; }
+  .gw-herma-callout__bullets { grid-template-columns: 1fr; gap: 6px; }
+}
+
+/* ==========================================================================
    Portable Cabins — 12-category catalogue
    ========================================================================== */
 
