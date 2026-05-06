@@ -484,6 +484,21 @@ body .paragraph.bold-lime-green {
   border: 1px solid rgba(201, 169, 97, 0.18);
 }
 
+/* Placeholder for category sections with no photos yet */
+.gw-cabin-cat__gallery--placeholder { grid-template-columns: 1fr; }
+.gw-cabin-cat__photo-pending {
+  background: rgba(14, 26, 43, 0.04);
+  border: 1px dashed rgba(14, 26, 43, 0.18);
+  border-radius: 14px;
+  padding: 28px 26px;
+  margin: 0;
+  color: var(--gw-muted, #6b7385);
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+.gw-cabin-cat__photo-pending a { color: var(--gw-gold-ink, #7a5d22); font-weight: 600; }
+
 @media (max-width: 991px) {
   .gw-cabin-cat__head { grid-template-columns: 64px 1fr; gap: 18px; }
   .gw-cabin-cat__num { font-size: 48px; }

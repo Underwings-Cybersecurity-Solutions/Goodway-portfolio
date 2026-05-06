@@ -1,0 +1,58 @@
+[
+  {
+    "slug": "paper",
+    "title": "Self-adhesive material &amp; paper rolls",
+    "lede": "Coated face material in rolls for converters and label printers &mdash; the raw stock that downstream presses turn into finished labels. Available in paper, polyester, polyethylene and polypropylene faces with a range of adhesives and liners.",
+    "bullets": [
+      "Paper / PE / PP / PET face material",
+      "Permanent &amp; removable adhesives",
+      "Glassine + PET liner options",
+      "Custom widths &amp; roll diameters",
+      "Reach / FDA / RoHS compliant",
+      "Rolls cut to converter spec"
+    ],
+    "matcher": {},
+    "images": [
+      {
+        "file": "01.webp"
+      }
+    ]
+  },
+  {
+    "slug": "label",
+    "title": "Office, address &amp; industrial labels",
+    "lede": "A4 sheet labels for office printing plus industrial-grade labels for asset, cable, pipe and packaging marking. The range covers everything from a 100-pack of mailing labels for a desk inkjet up to UV- and chemical-resistant tags for oilfield equipment.",
+    "bullets": [
+      "Universal A4 sheet labels (laser / inkjet)",
+      "Address &amp; mailing labels",
+      "Filing &amp; archiving",
+      "Industrial asset / cable / pipe labels",
+      "UV / water / chemical resistant grades",
+      "Custom die-cut shapes"
+    ],
+    "matcher": {},
+    "images": []
+  },
+  {
+    "slug": "labeling-machine",
+    "title": "Labelling machines &amp; applicator systems",
+    "lede": "Inline industrial labelling machinery &mdash; wrap-around, top &amp; side application, high-speed inline systems. Built in Germany, supported in the UAE through Goodway as the authorised distribution channel.",
+    "bullets": [
+      "Roll-fed wrap-around labellers",
+      "Top &amp; side application heads",
+      "High-speed inline integration",
+      "Modular adapters for existing lines",
+      "Spare parts &amp; consumables stocked",
+      "Service &amp; commissioning support"
+    ],
+    "matcher": {},
+    "images": [
+      {
+        "file": "01.webp"
+      },
+      {
+        "file": "02.webp"
+      }
+    ]
+  }
+]
