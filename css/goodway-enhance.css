@@ -159,6 +159,99 @@ body .paragraph.bold-lime-green {
 }
 
 /* ==========================================================================
+   About page — upgraded approach + milestones cards
+   White surface, gold left rule, icon entry point, hierarchy in the body
+   copy. Scoped to .gw-about-cards so the rest of .gw-coverage-card usage
+   on division / contact pages is unaffected.
+   ========================================================================== */
+.gw-about-cards { gap: 18px; }
+.gw-about-cards .gw-coverage-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid rgba(14, 26, 43, 0.06);
+  border-left: 4px solid var(--gw-gold, #c9a961);
+  border-radius: 14px;
+  padding: 30px 28px 28px;
+  box-shadow: 0 6px 18px rgba(14, 26, 43, 0.05);
+  transition: transform 0.25s var(--gw-ease, ease), box-shadow 0.25s var(--gw-ease, ease), border-color 0.25s var(--gw-ease, ease);
+}
+.gw-about-cards .gw-coverage-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(14, 26, 43, 0.10);
+  border-left-color: #d5b777;
+}
+
+.gw-about-cards__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(201, 169, 97, 0.14);
+  color: var(--gw-gold-ink, #7a5d22);
+  margin-bottom: 16px;
+}
+
+.gw-about-cards .gw-coverage__title {
+  color: var(--gw-navy, #0e1a2b);
+  font-weight: 600;
+  font-size: clamp(18px, 1.3vw, 21px);
+  line-height: 1.25;
+  margin: 0 0 12px;
+}
+
+.gw-about-cards .gw-coverage__body {
+  color: #2d3548;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.gw-about-cards .gw-coverage__body strong {
+  color: var(--gw-navy, #0e1a2b);
+  font-weight: 600;
+}
+
+/* Inline pill for ID / TRN / licence numbers — gold-ink, tabular nums */
+.gw-id-num {
+  display: inline-block;
+  font-family: var(--gw-mono, "Plus Jakarta Sans", system-ui, sans-serif);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.95em;
+  letter-spacing: 0.01em;
+  color: var(--gw-gold-ink, #7a5d22);
+  background: rgba(201, 169, 97, 0.10);
+  border: 1px solid rgba(201, 169, 97, 0.28);
+  border-radius: 6px;
+  padding: 1px 8px;
+  white-space: nowrap;
+}
+
+/* Date pills on the milestones cards — softer warm-grey, gold-ink text,
+   so they read as metadata not as competing headings. */
+.gw-about-cards .gw-datestamp {
+  display: inline-block;
+  background: rgba(14, 26, 43, 0.06);
+  color: var(--gw-gold-ink, #7a5d22);
+  font-family: var(--gw-display, "Fraunces", serif);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+/* The .gw-tilt-reveal animation that used to subtly skew cards on
+   reveal is overpowered now that cards have shadows + icons — flatten it. */
+.gw-about-cards.gw-tilt-reveal .gw-coverage-card { transform: none; }
+
+@media (max-width: 767px) {
+  .gw-about-cards .gw-coverage-card { padding: 24px 22px 22px; }
+  .gw-about-cards .gw-coverage__body { font-size: 14.5px; }
+}
+
+/* ==========================================================================
    HERMA callout — featured-authorised-distributor block on Office Equipment
    ========================================================================== */
 .gw-herma-callout {
