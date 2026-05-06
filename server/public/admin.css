@@ -57,6 +57,12 @@ code, .gwa-mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospa
   background: var(--gold); color: var(--navy);
   font-weight: 800; display: grid; place-items: center; font-size: 14px;
 }
+.gwa-brand__mark--img {
+  background: transparent;
+  object-fit: contain;
+  padding: 2px;
+}
+.gwa-login__brand .gwa-brand__mark--img { width: 56px; height: 56px; border-radius: 12px; }
 .gwa-brand__name { font-weight: 700; letter-spacing: 0.01em; }
 .gwa-nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 @media (max-width: 880px) { .gwa-nav { flex-direction: row; flex-wrap: wrap; flex: unset; } }
