@@ -177,63 +177,513 @@
     </div>
   </section>
 
-  <!-- 3b. GALLERY — full container range -->
-  <section class="gw-block gw-block--linen">
+  <!-- 3b. CONTAINER CATALOGUE — 12 product sections, one per category -->
+  <section class="gw-block gw-block--navy gw-cabin-intro" aria-labelledby="catalogue-intro">
     <div class="container">
       <header class="gw-block__header">
-        <div class="gw-block__eyebrow">// Container catalogue</div>
-        <h2 class="gw-block__title">The full container &amp; modular-build range.</h2>
-        <p class="gw-block__lede">Beyond ablution units and site offices, Goodway fabricates and supplies a wider range of containerised modules &mdash; from data centres and electrical e-houses to offshore baskets, pressurized Ex cabins and certified radioactive transport boxes. Photos below are from the Mussafah yard.</p>
+        <div class="gw-block__eyebrow">// The full container range</div>
+        <h2 id="catalogue-intro" class="gw-block__title">Twelve container categories &mdash; built in Mussafah, deployed across the UAE.</h2>
+        <p class="gw-block__lede">Beyond ablution units and site offices, Goodway fabricates and supplies a wider range of containerised modules. Each category below has its own typical specification, certification context and use cases &mdash; click through or scroll to see the catalogue. All photos are from our Mussafah Industrial Area, M-14 yard.</p>
       </header>
-      <div class="gw-cabin-gallery">
-        <figure class="gw-cabin-gallery__item">
-          <img src="../assets/images/sections/divisions/portable-cabins/gallery/ablution-unit.webp" alt="Goodway portable ablution &amp; shower cabin" loading="lazy" decoding="async" width="800" height="600">
-          <figcaption>Ablution &amp; shower cabin</figcaption>
-        </figure>
-        <figure class="gw-cabin-gallery__item">
-          <img src="../assets/images/sections/divisions/portable-cabins/gallery/customized-module.webp" alt="Customized modular container build" loading="lazy" decoding="async" width="800" height="600">
-          <figcaption>Customized modular build</figcaption>
-        </figure>
-        <figure class="gw-cabin-gallery__item">
-          <img src="../assets/images/sections/divisions/portable-cabins/gallery/data-centre.webp" alt="Containerised data centre" loading="lazy" decoding="async" width="800" height="600">
-          <figcaption>Containerised data centre</figcaption>
-        </figure>
-        <figure class="gw-cabin-gallery__item">
-          <img src="../assets/images/sections/divisions/portable-cabins/gallery/e-house.webp" alt="Electrical e-house container" loading="lazy" decoding="async" width="800" height="600">
-          <figcaption>Electrical e-house</figcaption>
-        </figure>
-        <figure class="gw-cabin-gallery__item">
-          <img src="../assets/images/sections/divisions/portable-cabins/gallery/iso-dry-cargo.webp" alt="ISO dry-cargo container" loading="lazy" decoding="async" width="800" height="600">
-          <figcaption>ISO dry-cargo container</figcaption>
-        </figure>
-        <figure class="gw-cabin-gallery__item">
-          <img src="../assets/images/sections/divisions/portable-cabins/gallery/mud-skip.webp" alt="Mud skip / waste skip frame" loading="lazy" decoding="async" width="800" height="600">
-          <figcaption>Mud skip &amp; waste skip frame</figcaption>
-        </figure>
-        <figure class="gw-cabin-gallery__item">
-          <img src="../assets/images/sections/divisions/portable-cabins/gallery/offshore-basket.webp" alt="Offshore lifting basket" loading="lazy" decoding="async" width="800" height="600">
-          <figcaption>Offshore basket</figcaption>
-        </figure>
-        <figure class="gw-cabin-gallery__item">
-          <img src="../assets/images/sections/divisions/portable-cabins/gallery/offshore-dry-cargo.webp" alt="Offshore dry-cargo container" loading="lazy" decoding="async" width="800" height="600">
-          <figcaption>Offshore dry-cargo container</figcaption>
-        </figure>
-        <figure class="gw-cabin-gallery__item">
-          <img src="../assets/images/sections/divisions/portable-cabins/gallery/offshore-reefer.webp" alt="Offshore refrigerated container" loading="lazy" decoding="async" width="800" height="600">
-          <figcaption>Offshore reefer</figcaption>
-        </figure>
-        <figure class="gw-cabin-gallery__item">
-          <img src="../assets/images/sections/divisions/portable-cabins/gallery/pressurized-ex-cabin.webp" alt="Pressurized Ex (explosion-proof) cabin" loading="lazy" decoding="async" width="800" height="600">
-          <figcaption>Pressurized Ex cabin</figcaption>
-        </figure>
-        <figure class="gw-cabin-gallery__item">
-          <img src="../assets/images/sections/divisions/portable-cabins/gallery/radioactive-box.webp" alt="Certified radioactive transport box" loading="lazy" decoding="async" width="800" height="600">
-          <figcaption>Radioactive transport box</figcaption>
-        </figure>
-        <figure class="gw-cabin-gallery__item">
-          <img src="../assets/images/sections/divisions/portable-cabins/gallery/shore-power.webp" alt="Shore-power container" loading="lazy" decoding="async" width="800" height="600">
-          <figcaption>Shore-power container</figcaption>
-        </figure>
+      <nav class="gw-cabin-intro__chips" aria-label="Container categories">
+        <a class="gw-cabin-intro__chip" href="#cat-ablution-unit"><span class="gw-cabin-intro__chip-num">01</span><span>Ablution &amp; shower cabins</span></a>
+        <a class="gw-cabin-intro__chip" href="#cat-customized-module"><span class="gw-cabin-intro__chip-num">02</span><span>Customized modular builds</span></a>
+        <a class="gw-cabin-intro__chip" href="#cat-data-centre"><span class="gw-cabin-intro__chip-num">03</span><span>Containerised data centres</span></a>
+        <a class="gw-cabin-intro__chip" href="#cat-e-house"><span class="gw-cabin-intro__chip-num">04</span><span>Electrical e-houses</span></a>
+        <a class="gw-cabin-intro__chip" href="#cat-iso-dry-cargo"><span class="gw-cabin-intro__chip-num">05</span><span>ISO dry-cargo containers</span></a>
+        <a class="gw-cabin-intro__chip" href="#cat-mud-skip"><span class="gw-cabin-intro__chip-num">06</span><span>Mud skips &amp; waste skip frames</span></a>
+        <a class="gw-cabin-intro__chip" href="#cat-offshore-basket"><span class="gw-cabin-intro__chip-num">07</span><span>Offshore lifting baskets</span></a>
+        <a class="gw-cabin-intro__chip" href="#cat-offshore-dry-cargo"><span class="gw-cabin-intro__chip-num">08</span><span>Offshore dry-cargo containers</span></a>
+        <a class="gw-cabin-intro__chip" href="#cat-offshore-reefer"><span class="gw-cabin-intro__chip-num">09</span><span>Offshore refrigerated containers</span></a>
+        <a class="gw-cabin-intro__chip" href="#cat-pressurized-ex-cabin"><span class="gw-cabin-intro__chip-num">10</span><span>Pressurized Ex (explosion-proof) cabins</span></a>
+        <a class="gw-cabin-intro__chip" href="#cat-radioactive-box"><span class="gw-cabin-intro__chip-num">11</span><span>Certified radioactive transport boxes</span></a>
+        <a class="gw-cabin-intro__chip" href="#cat-shore-power"><span class="gw-cabin-intro__chip-num">12</span><span>Shore-power containers</span></a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- CATEGORY 01 · ablution-unit -->
+  <section class="gw-block gw-block--ivory gw-cabin-cat" id="cat-ablution-unit" aria-labelledby="cat-ablution-unit-title">
+    <div class="container">
+      <header class="gw-cabin-cat__head">
+        <div class="gw-cabin-cat__num">01</div>
+        <div class="gw-cabin-cat__heading">
+          <div class="gw-block__eyebrow">// Container catalogue</div>
+          <h2 id="cat-ablution-unit-title" class="gw-block__title">Ablution &amp; shower cabins</h2>
+          <p class="gw-block__lede">Single and multi-stall portable toilet/shower units for construction sites, oilfield camps and remote yards. Each unit ships with an integrated 1,000 L water tank, septic tank, wall-mounted split A/C, external staircase with handrail and Goodway branding.</p>
+          <ul class="gw-cabin-cat__bullets">
+          <li>Single-stall WC cabins (man-portable)</li>
+          <li>2-, 4- and 6-stall ablution + shower blocks</li>
+          <li>Integrated water tank + septic tank</li>
+          <li>Wall-mounted split A/C standard</li>
+          <li>External staircase with handrail</li>
+          <li>Goodway-branded label plate</li>
+          </ul>
+        </div>
+      </header>
+      <div class="gw-cabin-cat__gallery">
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/ablution-unit/01.webp" alt="Ablution & shower cabins — photo 1" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/ablution-unit/02.webp" alt="Ablution & shower cabins — photo 2" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/ablution-unit/03.webp" alt="Ablution & shower cabins — photo 3" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/ablution-unit/04.webp" alt="Ablution & shower cabins — photo 4" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/ablution-unit/05.webp" alt="Ablution & shower cabins — photo 5" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/ablution-unit/06.webp" alt="Ablution & shower cabins — photo 6" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 02 · customized-module -->
+  <section class="gw-block gw-block--linen gw-cabin-cat" id="cat-customized-module" aria-labelledby="cat-customized-module-title">
+    <div class="container">
+      <header class="gw-cabin-cat__head">
+        <div class="gw-cabin-cat__num">02</div>
+        <div class="gw-cabin-cat__heading">
+          <div class="gw-block__eyebrow">// Container catalogue</div>
+          <h2 id="cat-customized-module-title" class="gw-block__title">Customized modular builds</h2>
+          <p class="gw-block__lede">Bespoke module fabrication to client specification &mdash; mixed-use cabins, multi-room layouts, branded exteriors, integrated services. Send us a sketch or BOQ and we build to drawing in 2&ndash;4 weeks.</p>
+          <ul class="gw-cabin-cat__bullets">
+          <li>Build-to-drawing fabrication</li>
+          <li>Mixed-use layouts (office + store + plant)</li>
+          <li>Custom widths, partitioning, doors</li>
+          <li>Client livery &amp; branding</li>
+          <li>Integrated services (water, power, HVAC)</li>
+          <li>Two- to four-week typical lead time</li>
+          </ul>
+        </div>
+      </header>
+      <div class="gw-cabin-cat__gallery">
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/01.webp" alt="Customized modular builds — photo 1" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/02.webp" alt="Customized modular builds — photo 2" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/03.webp" alt="Customized modular builds — photo 3" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/04.webp" alt="Customized modular builds — photo 4" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/05.webp" alt="Customized modular builds — photo 5" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/06.webp" alt="Customized modular builds — photo 6" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/07.webp" alt="Customized modular builds — photo 7" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/08.webp" alt="Customized modular builds — photo 8" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/09.webp" alt="Customized modular builds — photo 9" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/10.webp" alt="Customized modular builds — photo 10" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/11.webp" alt="Customized modular builds — photo 11" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/12.webp" alt="Customized modular builds — photo 12" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/customized-module/13.webp" alt="Customized modular builds — photo 13" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 03 · data-centre -->
+  <section class="gw-block gw-block--ivory gw-cabin-cat" id="cat-data-centre" aria-labelledby="cat-data-centre-title">
+    <div class="container">
+      <header class="gw-cabin-cat__head">
+        <div class="gw-cabin-cat__num">03</div>
+        <div class="gw-cabin-cat__heading">
+          <div class="gw-block__eyebrow">// Container catalogue</div>
+          <h2 id="cat-data-centre-title" class="gw-block__title">Containerised data centres</h2>
+          <p class="gw-block__lede">Plug-and-play modular data halls for edge computing, oilfield IT and remote operations centres. Factory-built, ruggedised, climate-controlled with redundant cooling and fire suppression. Deployed to site as a single craned lift.</p>
+          <ul class="gw-cabin-cat__bullets">
+          <li>Pre-cabled racks &amp; cable trays</li>
+          <li>Precision in-row cooling</li>
+          <li>FM-200 / inert-gas fire suppression</li>
+          <li>UPS + generator interface ready</li>
+          <li>Access control &amp; CCTV-ready</li>
+          <li>Climate-rated for UAE outdoor deployment</li>
+          </ul>
+        </div>
+      </header>
+      <div class="gw-cabin-cat__gallery">
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/data-centre/01.webp" alt="Containerised data centres — photo 1" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/data-centre/02.webp" alt="Containerised data centres — photo 2" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/data-centre/03.webp" alt="Containerised data centres — photo 3" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/data-centre/04.webp" alt="Containerised data centres — photo 4" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/data-centre/05.webp" alt="Containerised data centres — photo 5" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/data-centre/06.webp" alt="Containerised data centres — photo 6" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 04 · e-house -->
+  <section class="gw-block gw-block--linen gw-cabin-cat" id="cat-e-house" aria-labelledby="cat-e-house-title">
+    <div class="container">
+      <header class="gw-cabin-cat__head">
+        <div class="gw-cabin-cat__num">04</div>
+        <div class="gw-cabin-cat__heading">
+          <div class="gw-block__eyebrow">// Container catalogue</div>
+          <h2 id="cat-e-house-title" class="gw-block__title">Electrical e-houses</h2>
+          <p class="gw-block__lede">Pre-fabricated electrical substation / MCC buildings housing switchgear, transformers and control systems. Factory-tested as a single unit before delivery, dramatically reducing on-site electrical work for oil &amp; gas, power, mining and large industrial projects.</p>
+          <ul class="gw-cabin-cat__bullets">
+          <li>LV / MV switchgear &amp; MCC packages</li>
+          <li>Dry-type / oil-filled transformers</li>
+          <li>Integrated control rooms &amp; cable galleries</li>
+          <li>HVAC, lighting, fire detection</li>
+          <li>FAT (factory acceptance test) before shipping</li>
+          <li>Single-lift deployment to site</li>
+          </ul>
+        </div>
+      </header>
+      <div class="gw-cabin-cat__gallery">
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/e-house/01.webp" alt="Electrical e-houses — photo 1" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/e-house/02.webp" alt="Electrical e-houses — photo 2" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/e-house/03.webp" alt="Electrical e-houses — photo 3" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/e-house/04.webp" alt="Electrical e-houses — photo 4" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/e-house/05.webp" alt="Electrical e-houses — photo 5" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/e-house/06.webp" alt="Electrical e-houses — photo 6" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/e-house/07.webp" alt="Electrical e-houses — photo 7" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/e-house/08.webp" alt="Electrical e-houses — photo 8" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 05 · iso-dry-cargo -->
+  <section class="gw-block gw-block--ivory gw-cabin-cat" id="cat-iso-dry-cargo" aria-labelledby="cat-iso-dry-cargo-title">
+    <div class="container">
+      <header class="gw-cabin-cat__head">
+        <div class="gw-cabin-cat__num">05</div>
+        <div class="gw-cabin-cat__heading">
+          <div class="gw-block__eyebrow">// Container catalogue</div>
+          <h2 id="cat-iso-dry-cargo-title" class="gw-block__title">ISO dry-cargo containers</h2>
+          <p class="gw-block__lede">Standard 20 ft and 40 ft ISO-spec containers for general cargo, project freight and storage. Can be modified for spares stores, deployment kits, document archives or one-off project equipment crates.</p>
+          <ul class="gw-cabin-cat__bullets">
+          <li>20 ft and 40 ft ISO certified</li>
+          <li>CSC plate, weather-tight gaskets</li>
+          <li>Lockable double cargo doors</li>
+          <li>Optional ventilation, lighting, racks</li>
+          <li>Custom paint &amp; livery on request</li>
+          <li>CW-grade hardwood flooring</li>
+          </ul>
+        </div>
+      </header>
+      <div class="gw-cabin-cat__gallery">
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/iso-dry-cargo/01.webp" alt="ISO dry-cargo containers — photo 1" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/iso-dry-cargo/02.webp" alt="ISO dry-cargo containers — photo 2" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/iso-dry-cargo/03.webp" alt="ISO dry-cargo containers — photo 3" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/iso-dry-cargo/04.webp" alt="ISO dry-cargo containers — photo 4" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/iso-dry-cargo/05.webp" alt="ISO dry-cargo containers — photo 5" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 06 · mud-skip -->
+  <section class="gw-block gw-block--linen gw-cabin-cat" id="cat-mud-skip" aria-labelledby="cat-mud-skip-title">
+    <div class="container">
+      <header class="gw-cabin-cat__head">
+        <div class="gw-cabin-cat__num">06</div>
+        <div class="gw-cabin-cat__heading">
+          <div class="gw-block__eyebrow">// Container catalogue</div>
+          <h2 id="cat-mud-skip-title" class="gw-block__title">Mud skips &amp; waste skip frames</h2>
+          <p class="gw-block__lede">Drilling waste collection skips and frames for oil &amp; gas operations. Designed to handle drilling mud, rock cuttings and hazardous waste at active well sites. Crane-liftable, sealed, certified for offshore handling.</p>
+          <ul class="gw-cabin-cat__bullets">
+          <li>Drilling-mud and cuttings collection</li>
+          <li>Sealed, leak-tight construction</li>
+          <li>Crane-lift padeyes &amp; forklift pockets</li>
+          <li>Frame variants for skip-stacking</li>
+          <li>DNV / EN 12079 certified options</li>
+          <li>Sized for rig-deck rotation</li>
+          </ul>
+        </div>
+      </header>
+      <div class="gw-cabin-cat__gallery">
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/mud-skip/01.webp" alt="Mud skips & waste skip frames — photo 1" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/mud-skip/02.webp" alt="Mud skips & waste skip frames — photo 2" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/mud-skip/03.webp" alt="Mud skips & waste skip frames — photo 3" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/mud-skip/04.webp" alt="Mud skips & waste skip frames — photo 4" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 07 · offshore-basket -->
+  <section class="gw-block gw-block--ivory gw-cabin-cat" id="cat-offshore-basket" aria-labelledby="cat-offshore-basket-title">
+    <div class="container">
+      <header class="gw-cabin-cat__head">
+        <div class="gw-cabin-cat__num">07</div>
+        <div class="gw-cabin-cat__heading">
+          <div class="gw-block__eyebrow">// Container catalogue</div>
+          <h2 id="cat-offshore-basket-title" class="gw-block__title">Offshore lifting baskets</h2>
+          <p class="gw-block__lede">DNV / EN-12079-certified lifting baskets for offshore platform supply. Used to transfer cargo from supply vessels to rig decks via crane &mdash; the workhorse asset of any offshore logistics operation.</p>
+          <ul class="gw-cabin-cat__bullets">
+          <li>DNV 2.7-1 / EN 12079 certified</li>
+          <li>Cargo capacities from 2 t to 12 t</li>
+          <li>Half-height, full-height &amp; mesh variants</li>
+          <li>Heavy-duty padeyes + sling sets</li>
+          <li>Forklift pockets for yard handling</li>
+          <li>Periodic re-certification supported</li>
+          </ul>
+        </div>
+      </header>
+      <div class="gw-cabin-cat__gallery">
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/offshore-basket/01.webp" alt="Offshore lifting baskets — photo 1" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/offshore-basket/02.webp" alt="Offshore lifting baskets — photo 2" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/offshore-basket/03.webp" alt="Offshore lifting baskets — photo 3" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 08 · offshore-dry-cargo -->
+  <section class="gw-block gw-block--linen gw-cabin-cat" id="cat-offshore-dry-cargo" aria-labelledby="cat-offshore-dry-cargo-title">
+    <div class="container">
+      <header class="gw-cabin-cat__head">
+        <div class="gw-cabin-cat__num">08</div>
+        <div class="gw-cabin-cat__heading">
+          <div class="gw-block__eyebrow">// Container catalogue</div>
+          <h2 id="cat-offshore-dry-cargo-title" class="gw-block__title">Offshore dry-cargo containers</h2>
+          <p class="gw-block__lede">DNV-certified containers reinforced for offshore use &mdash; rated for crane lifting in sea state, marine transport and rig-deck stacking. For tools, spares and project equipment heading to platforms or supply yards.</p>
+          <ul class="gw-cabin-cat__bullets">
+          <li>DNV 2.7-1 offshore rated</li>
+          <li>Reinforced corner posts &amp; padeyes</li>
+          <li>Lashing points for sea fastening</li>
+          <li>10 ft, 20 ft and bespoke footprints</li>
+          <li>Marine-grade paint system</li>
+          <li>Periodic re-certification supported</li>
+          </ul>
+        </div>
+      </header>
+      <div class="gw-cabin-cat__gallery">
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/offshore-dry-cargo/01.webp" alt="Offshore dry-cargo containers — photo 1" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/offshore-dry-cargo/02.webp" alt="Offshore dry-cargo containers — photo 2" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/offshore-dry-cargo/03.webp" alt="Offshore dry-cargo containers — photo 3" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 09 · offshore-reefer -->
+  <section class="gw-block gw-block--ivory gw-cabin-cat" id="cat-offshore-reefer" aria-labelledby="cat-offshore-reefer-title">
+    <div class="container">
+      <header class="gw-cabin-cat__head">
+        <div class="gw-cabin-cat__num">09</div>
+        <div class="gw-cabin-cat__heading">
+          <div class="gw-block__eyebrow">// Container catalogue</div>
+          <h2 id="cat-offshore-reefer-title" class="gw-block__title">Offshore refrigerated containers</h2>
+          <p class="gw-block__lede">DNV-certified refrigerated containers for offshore use. Temperature-controlled storage of food, samples and perishables on platforms and supply vessels. Built for the marine environment, certified for crane lift in sea state.</p>
+          <ul class="gw-cabin-cat__bullets">
+          <li>DNV 2.7-1 offshore rated</li>
+          <li>Temperature range -25&deg;C to +25&deg;C</li>
+          <li>Marine-rated refrigeration unit</li>
+          <li>Stainless / GRP interior options</li>
+          <li>Heavy-duty padeyes &amp; lashing points</li>
+          <li>Onboard data-logger option</li>
+          </ul>
+        </div>
+      </header>
+      <div class="gw-cabin-cat__gallery gw-cabin-cat__gallery--two">
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/offshore-reefer/01.webp" alt="Offshore refrigerated containers — photo 1" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/offshore-reefer/02.webp" alt="Offshore refrigerated containers — photo 2" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 10 · pressurized-ex-cabin -->
+  <section class="gw-block gw-block--linen gw-cabin-cat" id="cat-pressurized-ex-cabin" aria-labelledby="cat-pressurized-ex-cabin-title">
+    <div class="container">
+      <header class="gw-cabin-cat__head">
+        <div class="gw-cabin-cat__num">10</div>
+        <div class="gw-cabin-cat__heading">
+          <div class="gw-block__eyebrow">// Container catalogue</div>
+          <h2 id="cat-pressurized-ex-cabin-title" class="gw-block__title">Pressurized Ex (explosion-proof) cabins</h2>
+          <p class="gw-block__lede">Explosion-proof pressurised cabins for hazardous-area work in Zone 1 / Zone 2 atmospheres. Internal positive pressurisation prevents flammable gas ingress, certifying the interior as safe for personnel and electronics in oil &amp; gas, petrochemical and refinery environments.</p>
+          <ul class="gw-cabin-cat__bullets">
+          <li>ATEX / IECEx Zone 1 / Zone 2 certified</li>
+          <li>Continuous pressurisation system</li>
+          <li>Gas-detection interlock with shutdown</li>
+          <li>Use cases: control rooms, analyzer shelters</li>
+          <li>Welding habitats &amp; technician shelters</li>
+          <li>Air-conditioning sized for hot climate</li>
+          </ul>
+        </div>
+      </header>
+      <div class="gw-cabin-cat__gallery">
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/pressurized-ex-cabin/01.webp" alt="Pressurized Ex (explosion-proof) cabins — photo 1" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/pressurized-ex-cabin/02.webp" alt="Pressurized Ex (explosion-proof) cabins — photo 2" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/pressurized-ex-cabin/03.webp" alt="Pressurized Ex (explosion-proof) cabins — photo 3" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/pressurized-ex-cabin/04.webp" alt="Pressurized Ex (explosion-proof) cabins — photo 4" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 11 · radioactive-box -->
+  <section class="gw-block gw-block--ivory gw-cabin-cat" id="cat-radioactive-box" aria-labelledby="cat-radioactive-box-title">
+    <div class="container">
+      <header class="gw-cabin-cat__head">
+        <div class="gw-cabin-cat__num">11</div>
+        <div class="gw-cabin-cat__heading">
+          <div class="gw-block__eyebrow">// Container catalogue</div>
+          <h2 id="cat-radioactive-box-title" class="gw-block__title">Certified radioactive transport boxes</h2>
+          <p class="gw-block__lede">IAEA / ADR-compliant containers for radioactive-material transport &mdash; including NORM (Naturally Occurring Radioactive Material) waste from oilfield operations and sealed industrial gamma sources. Lead-shielded, sealed, regulator-approved for road and sea transit.</p>
+          <ul class="gw-cabin-cat__bullets">
+          <li>IAEA SSR-6 / ADR Class 7 compliant</li>
+          <li>Lead / steel shielded as specified</li>
+          <li>Tamper-evident closure</li>
+          <li>NORM disposal &amp; sealed-source transport</li>
+          <li>Activity placards / labelling</li>
+          <li>Documentation pack on request</li>
+          </ul>
+        </div>
+      </header>
+      <div class="gw-cabin-cat__gallery gw-cabin-cat__gallery--two">
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/radioactive-box/01.webp" alt="Certified radioactive transport boxes — photo 1" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/radioactive-box/02.webp" alt="Certified radioactive transport boxes — photo 2" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 12 · shore-power -->
+  <section class="gw-block gw-block--linen gw-cabin-cat" id="cat-shore-power" aria-labelledby="cat-shore-power-title">
+    <div class="container">
+      <header class="gw-cabin-cat__head">
+        <div class="gw-cabin-cat__num">12</div>
+        <div class="gw-cabin-cat__heading">
+          <div class="gw-block__eyebrow">// Container catalogue</div>
+          <h2 id="cat-shore-power-title" class="gw-block__title">Shore-power containers</h2>
+          <p class="gw-block__lede">Containerised shore-power supply for vessels at port. Lets ships shut down on-board generators while berthed, drastically cutting fuel use, emissions and noise. Built to ISO / IEC 80005 cold-ironing standard.</p>
+          <ul class="gw-cabin-cat__bullets">
+          <li>IEC / ISO 80005 cold-ironing compliant</li>
+          <li>HV / LV variants &amp; multi-vessel feeds</li>
+          <li>Frequency converter (50 / 60 Hz)</li>
+          <li>Containerised plug-and-play deployment</li>
+          <li>Switchgear, protection, metering integrated</li>
+          <li>Reduces port emissions &amp; fuel burn</li>
+          </ul>
+        </div>
+      </header>
+      <div class="gw-cabin-cat__gallery">
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/shore-power/01.webp" alt="Shore-power containers — photo 1" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/shore-power/02.webp" alt="Shore-power containers — photo 2" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/shore-power/03.webp" alt="Shore-power containers — photo 3" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/shore-power/04.webp" alt="Shore-power containers — photo 4" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/shore-power/05.webp" alt="Shore-power containers — photo 5" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/shore-power/06.webp" alt="Shore-power containers — photo 6" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/shore-power/07.webp" alt="Shore-power containers — photo 7" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/shore-power/08.webp" alt="Shore-power containers — photo 8" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/shore-power/09.webp" alt="Shore-power containers — photo 9" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
+          <figure class="gw-cabin-cat__photo">
+            <img src="../assets/images/sections/divisions/portable-cabins/shore-power/10.webp" alt="Shore-power containers — photo 10" loading="lazy" decoding="async" width="1200" height="900">
+          </figure>
       </div>
     </div>
   </section>
