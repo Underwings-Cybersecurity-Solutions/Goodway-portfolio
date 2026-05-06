@@ -252,6 +252,31 @@ body .paragraph.bold-lime-green {
 }
 
 /* ==========================================================================
+   HERMA marketing strap — slate-grey banner with brand-gradient stripe
+   ========================================================================== */
+.gw-herma-strap {
+  background: #5a6473;
+  padding: clamp(20px, 3vw, 32px) 0;
+  position: relative;
+}
+.gw-herma-strap::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0067b1 0%, #f6a200 100%);
+}
+.gw-herma-strap__text {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: clamp(15px, 1.6vw, 20px);
+  line-height: 1.45;
+  text-align: center;
+  margin: 0;
+  letter-spacing: 0.005em;
+}
+
+/* ==========================================================================
    HERMA callout — featured-authorised-distributor block on Office Equipment
    ========================================================================== */
 .gw-herma-callout {
