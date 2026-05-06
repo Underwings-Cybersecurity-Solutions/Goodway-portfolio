@@ -254,3 +254,27 @@ code, .gwa-mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospa
 .gwa-login__subtitle { font-size: 13px; color: var(--muted); }
 .gwa-login__hint { font-size: 12px; color: var(--muted); text-align: center; margin: 8px 0 0; }
 .gwa-login__hint code { background: var(--linen); padding: 1px 5px; border-radius: 4px; }
+
+/* Forgot-password recovery details on the login card */
+.gwa-login__recovery { margin-top: 8px; font-size: 12.5px; color: var(--muted); }
+.gwa-login__recovery > summary { cursor: pointer; font-weight: 600; color: var(--navy); padding: 6px 0; outline: none; }
+.gwa-login__recovery > summary:hover { color: var(--gold-ink, #7a5d22); }
+.gwa-login__recovery[open] > summary { margin-bottom: 6px; }
+.gwa-login__recovery p, .gwa-login__recovery ol { margin: 6px 0; line-height: 1.5; }
+.gwa-login__recovery ol { padding-left: 20px; }
+.gwa-login__recovery li { margin: 4px 0; }
+.gwa-login__recovery code { background: var(--linen); padding: 1px 5px; border-radius: 4px; font-size: 11.5px; }
+
+/* Change-password page */
+.gwa-form--narrow { max-width: 520px; display: flex; flex-direction: column; gap: 14px; }
+.gwa-field__hint { color: var(--muted); font-size: 12px; line-height: 1.45; margin-top: 2px; font-weight: 400; text-transform: none; letter-spacing: 0; }
+.gwa-form__actions { display: flex; gap: 10px; align-items: center; margin-top: 4px; }
+.gwa-callout { background: var(--linen); border-left: 3px solid var(--gold); border-radius: 8px; padding: 14px 18px; font-size: 13px; line-height: 1.55; color: var(--navy); margin-top: 8px; }
+.gwa-callout strong { display: block; margin-bottom: 6px; }
+.gwa-callout ol { margin: 0; padding-left: 20px; }
+.gwa-callout li { margin: 3px 0; color: #2d3548; }
+.gwa-callout code { background: rgba(14, 26, 43, 0.06); padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+.gwa-callout--info { border-left-color: #4a7fb8; }
+
+/* Sidebar Change-password link visual treatment */
+.gwa-sidebar__foot .gwa-link.is-active { color: var(--gold); }

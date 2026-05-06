@@ -19,7 +19,18 @@
       <input type="password" name="password" autocomplete="current-password" required>
     </label>
     <button type="submit" class="gwa-btn gwa-btn--primary">Sign in</button>
-    <p class="gwa-login__hint">First run? Set a password with <code>npm run set-password -- "your-password"</code>.</p>
+    <details class="gwa-login__recovery">
+      <summary>Forgot password?</summary>
+      <p>This admin uses a single account, so password recovery is done from the server shell &mdash; not by email.</p>
+      <ol>
+        <li>Open a terminal in the <code>server/</code> folder</li>
+        <li>Run <code>npm run set-password -- "your-new-password"</code></li>
+        <li>Copy the printed <code>ADMIN_PASSWORD_HASH=...</code> line into <code>server/.env</code>, replacing the existing one</li>
+        <li>Restart the server (<code>Ctrl + C</code> then <code>npm start</code>)</li>
+        <li>Sign in with the new password</li>
+      </ol>
+      <p>Once signed in, you can change the password anytime from <strong>Profile &rarr; Change password</strong> &mdash; no shell required.</p>
+    </details>
   </form>
 </main>
 </body></html>

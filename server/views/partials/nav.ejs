@@ -16,6 +16,7 @@
   <div class="gwa-sidebar__foot">
     <% if (user) { %>
       <span class="gwa-sidebar__user"><%= user.username %></span>
+      <a href="/admin/password" class="gwa-link <%= active === 'password' ? 'is-active' : '' %>">Change password</a>
       <form method="post" action="/admin/logout" class="gwa-inline-form">
         <button type="submit" class="gwa-link">Sign out</button>
       </form>
