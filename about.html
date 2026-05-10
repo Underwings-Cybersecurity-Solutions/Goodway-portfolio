@@ -175,7 +175,35 @@
       <div class="services-header">
         <div class="paragraph bold-lime-green">// OUR APPROACH</div>
         <h3 class="h3-default dark-grey">Authorised distribution, not parallel imports.</h3>
-        <p class="gw-prose-center">Goodway operates as a direct channel between international principals and UAE buyers. Every product we ship is sourced through a formal distribution agreement &mdash; not a grey-market intermediary &mdash; which means documented origin, full manufacturer warranty, and accountability that stays in Abu Dhabi.</p>
+        <!-- ScrollSyncedText Framer module mounts here. The native <p>
+             stays as initial children: the schema injector + screen-readers
+             + JS-disabled / CDN-blocked / reduced-motion users all see the
+             paragraph immediately; the Framer animation only takes over if
+             the import succeeds and motion is allowed. -->
+        <div id="gw-scrollsync-approach" class="gw-framer-mount">
+          <p class="gw-prose-center">Goodway operates as a direct channel between international principals and UAE buyers. Every product we ship is sourced through a formal distribution agreement &mdash; not a grey-market intermediary &mdash; which means documented origin, full manufacturer warranty, and accountability that stays in Abu Dhabi.</p>
+        </div>
+        <script type="module">
+          try {
+            /* Skip the animation entirely if the user has set
+               prefers-reduced-motion — they keep the static paragraph. */
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+              throw new Error('reduced-motion preference — keeping static text');
+            }
+            const [Mod, React, ReactDOM] = await Promise.all([
+              import('https://framer.com/m/ScrollSyncedText-pi0Rnq.js@zmg67DaPFjJjIzaxKHok'),
+              import('https://esm.sh/react@18'),
+              import('https://esm.sh/react-dom@18/client')
+            ]);
+            const ScrollSyncedText = Mod.default || Mod;
+            const text = "Goodway operates as a direct channel between international principals and UAE buyers. Every product we ship is sourced through a formal distribution agreement — not a grey-market intermediary — which means documented origin, full manufacturer warranty, and accountability that stays in Abu Dhabi.";
+            const root = ReactDOM.createRoot(document.getElementById('gw-scrollsync-approach'));
+            root.render(React.createElement(ScrollSyncedText, { text, children: text }));
+          } catch (e) {
+            /* Native <p> fallback already in place — nothing to do. */
+            console.warn('Framer ScrollSyncedText failed to load:', e);
+          }
+        </script>
       </div>
 
       <div class="gw-coverage-grid gw-about-cards gw-u-mt-32 gw-tilt-reveal">
