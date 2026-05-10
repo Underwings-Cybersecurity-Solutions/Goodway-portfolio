@@ -490,6 +490,23 @@ body .paragraph.bold-lime-green {
   border: 1px solid rgba(201, 169, 97, 0.18);
 }
 
+/* Principal-page galleries (HERMA, Fraste) — fewer, larger, more
+   editorial photos. Wider cap, 4:3 aspect (less aggressive crop than
+   the fixed 220px height used on the Portable Cabins density grid),
+   bigger gap. Scoped to body.gw-principal so the Portable Cabins
+   division page (body.gw-division) keeps its compact treatment. */
+.gw-principal .gw-cabin-cat__gallery {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 700px));
+  gap: 20px;
+}
+.gw-principal .gw-cabin-cat__photo img {
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+@media (max-width: 767px) {
+  .gw-principal .gw-cabin-cat__gallery { gap: 14px; }
+}
+
 /* Placeholder for category sections with no photos yet */
 .gw-cabin-cat__gallery--placeholder { grid-template-columns: 1fr; }
 .gw-cabin-cat__photo-pending {
