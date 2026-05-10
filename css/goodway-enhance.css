@@ -449,15 +449,17 @@ body .paragraph.bold-lime-green {
   opacity: 0.7;
 }
 
-/* Photo gallery inside a category section — auto-fill cards capped at
-   ~420px so a single photo doesn't balloon to full container width
-   (which scaled the 1200-wide source up and looked blurry). Multi-photo
-   galleries still pack from the left and wrap naturally. */
+/* Photo gallery inside a category section — auto-fit cards capped at
+   ~520px so a single photo doesn't balloon to full container width,
+   and the row is centred so sparse galleries (1-2 photos) look
+   balanced inside the wider container instead of left-orphaned.
+   Many-photo galleries still pack tightly because auto-fit collapses
+   empty tracks. */
 .gw-cabin-cat__gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 420px));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 520px));
   gap: 14px;
-  justify-content: start;
+  justify-content: center;
 }
 .gw-cabin-cat__gallery--two {
   grid-template-columns: repeat(2, minmax(0, 1fr));
