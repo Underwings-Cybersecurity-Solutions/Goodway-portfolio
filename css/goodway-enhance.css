@@ -252,6 +252,154 @@ body .paragraph.bold-lime-green {
 }
 
 /* ==========================================================================
+   /services — How We Work (4-step process with icons + flow line)
+   ========================================================================== */
+.gw-services-process { position: relative; gap: 18px; }
+.gw-services-process .gw-coverage-card {
+  background: #ffffff;
+  border: 1px solid rgba(14, 26, 43, 0.06);
+  border-top: 3px solid var(--gw-gold, #c9a961);
+  border-radius: 14px;
+  padding: 28px 24px 26px;
+  box-shadow: 0 4px 14px rgba(14, 26, 43, 0.05);
+  position: relative;
+}
+.gw-services-process .gw-coverage__num {
+  color: var(--gw-gold-ink, #7a5d22);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.gw-services-process .gw-coverage__title {
+  color: var(--gw-navy, #0e1a2b);
+  font-size: clamp(16px, 1.2vw, 18px);
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 12px;
+}
+.gw-services-process .gw-coverage__body {
+  color: #2d3548;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.gw-services-process .gw-coverage__body strong { color: var(--gw-navy, #0e1a2b); }
+.gw-services-process__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(201, 169, 97, 0.14);
+  color: var(--gw-gold-ink, #7a5d22);
+  margin-bottom: 14px;
+}
+@media (min-width: 992px) {
+  .gw-services-process::before {
+    content: "";
+    position: absolute;
+    top: 78px;
+    left: 8%;
+    right: 8%;
+    border-top: 2px dashed rgba(201, 169, 97, 0.35);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .gw-services-process .gw-coverage-card { z-index: 1; }
+}
+
+/* ==========================================================================
+   /services — Who We Serve (link-card sector grid with icons + chips)
+   ========================================================================== */
+.gw-services-sectors { gap: 16px; }
+.gw-services-sectors__card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid rgba(14, 26, 43, 0.06);
+  border-left: 4px solid var(--gw-gold, #c9a961);
+  border-radius: 14px;
+  padding: 26px 24px 22px;
+  box-shadow: 0 4px 14px rgba(14, 26, 43, 0.05);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s var(--gw-ease, ease), box-shadow 0.25s var(--gw-ease, ease), border-color 0.25s var(--gw-ease, ease);
+}
+.gw-services-sectors__card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(14, 26, 43, 0.10);
+  border-left-color: #d5b777;
+}
+.gw-services-sectors__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(201, 169, 97, 0.14);
+  color: var(--gw-gold-ink, #7a5d22);
+  margin-bottom: 12px;
+}
+.gw-services-sectors .gw-coverage__title {
+  color: var(--gw-navy, #0e1a2b);
+  font-size: clamp(16px, 1.2vw, 18px);
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 8px;
+}
+.gw-services-sectors__sub {
+  display: block;
+  color: var(--gw-muted, #6b7385);
+  font-weight: 400;
+  font-size: 13px;
+  margin-top: 2px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.gw-services-sectors__lede {
+  color: #2d3548;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+  flex: 1 0 auto;
+}
+.gw-services-sectors__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.gw-services-sectors__chips .gw-chip {
+  font-size: 11.5px;
+  padding: 3px 9px;
+  background: rgba(201, 169, 97, 0.10);
+  border: 1px solid rgba(201, 169, 97, 0.28);
+  border-radius: 999px;
+  color: var(--gw-gold-ink, #7a5d22);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.gw-services-sectors__cta {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--gw-gold-ink, #7a5d22);
+  text-transform: uppercase;
+  margin-top: auto;
+  transition: transform 0.2s var(--gw-ease, ease);
+}
+.gw-services-sectors__card:hover .gw-services-sectors__cta { transform: translateX(3px); }
+
+@media (max-width: 767px) {
+  .gw-services-process .gw-coverage-card,
+  .gw-services-sectors__card { padding: 22px 20px; }
+}
+
+/* ==========================================================================
    Brand marketing strap — slate-grey banner with brand-gradient stripe.
    Base class .gw-brand-strap; per-brand modifiers swap the top stripe.
    ========================================================================== */
