@@ -27,7 +27,7 @@
      Paste tokens here once the client registers each service. Empty
      string = feature is skipped. All three propagate to every page
      through the runtime head injector in Section 16b. */
-  var GSC_TOKEN       = '';    // Google Search Console "HTML tag" method — paste the content="..." value
+  var GSC_TOKEN       = '36t07jrNiYb68Bt07pT2VXVxlrjoXxUwRDcISDroaAI';    // Google Search Console "HTML tag" method — paste the content="..." value
   var GA_MEASUREMENT_ID = 'G-B3R0T45EM2';  // Google Analytics 4, format "G-XXXXXXXX"
   var GTM_ID          = '';    // Google Tag Manager, format "GTM-XXXXXX" (optional — only if using GTM instead of GA4 direct)
 
