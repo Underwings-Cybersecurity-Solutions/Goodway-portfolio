@@ -28,7 +28,7 @@
      string = feature is skipped. All three propagate to every page
      through the runtime head injector in Section 16b. */
   var GSC_TOKEN       = '';    // Google Search Console "HTML tag" method — paste the content="..." value
-  var GA_MEASUREMENT_ID = '';  // Google Analytics 4, format "G-XXXXXXXX"
+  var GA_MEASUREMENT_ID = 'G-B3R0T45EM2';  // Google Analytics 4, format "G-XXXXXXXX"
   var GTM_ID          = '';    // Google Tag Manager, format "GTM-XXXXXX" (optional — only if using GTM instead of GA4 direct)
 
   /* Where the lead-capture POST goes. Leave empty to skip server capture
@@ -643,7 +643,7 @@
         })
         .catch(function () {
           /* Fallback: open user's mail client */
-          var mailto = 'mailto:gwayuae@outlook.com?subject=' + encodeURIComponent('Catalogue Request') +
+          var mailto = 'mailto:info@goodway.ae?subject=' + encodeURIComponent('Catalogue Request') +
             '&body=' + encodeURIComponent('Please send the Goodway PDF catalogue to: ' + email.value);
           window.location.href = mailto;
           showToast('Opening your email app to request the catalogue.', 'success');
@@ -1209,7 +1209,7 @@
             '@type': 'Organization', '@id': ORG_ID,
             name: 'Good Way General Trading', alternateName: 'Goodway',
             url: BASE + '/', logo: BASE + '/images/goodway-logo.png',
-            email: 'gwayuae@outlook.com',
+            email: 'info@goodway.ae',
             telephone: '+971564423539',
             vatID: '100464283900003', taxID: 'CN-1843054',
             foundingDate: '2014',
@@ -1219,7 +1219,7 @@
           {
             '@type': 'LocalBusiness', '@id': LOC_ID,
             name: 'Good Way General Trading', image: BASE + '/images/goodway-logo.png',
-            url: BASE + '/', telephone: '+971564423539', email: 'gwayuae@outlook.com',
+            url: BASE + '/', telephone: '+971564423539', email: 'info@goodway.ae',
             priceRange: '$$',
             address: { '@type': 'PostalAddress', postOfficeBoxNumber: '10422', addressLocality: 'Abu Dhabi', addressRegion: 'Abu Dhabi', addressCountry: 'AE' },
             openingHours: 'Mo-Fr 08:00-17:00'
@@ -1817,7 +1817,7 @@
       if (node.querySelector('a')) return;
       var text = (node.textContent || '').trim();
       if (EMAIL_RE.test(text)) {
-        node.innerHTML = '<a href="mailto:gwayuae@outlook.com" class="gw-contact-link">' + text + '</a>';
+        node.innerHTML = '<a href="mailto:info@goodway.ae" class="gw-contact-link">' + text + '</a>';
       } else if (MOBILE_RE.test(text)) {
         node.innerHTML =
           '<a href="tel:+971564423539" class="gw-contact-link">+971 56 442 3539</a>' +

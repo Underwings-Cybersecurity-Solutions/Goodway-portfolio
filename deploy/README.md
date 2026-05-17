@@ -46,7 +46,7 @@ Open `server/.env` and fill **one** of the notify blocks:
 ```ini
 # Resend (recommended — cheapest, cleanest dashboard)
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxx
-NOTIFY_TO=gwayuae@outlook.com
+NOTIFY_TO=info@goodway.ae
 NOTIFY_FROM=Goodway Website <no-reply@goodway.ae>
 ```
 
@@ -114,4 +114,4 @@ sudo systemctl reload nginx
 
 ## Not ready to deploy yet?
 
-Zero pressure — everything in this folder can sit unused. The forms still work in pure-static mode via `mailto:gwayuae@outlook.com` until you flip the switch.
+Zero pressure — everything in this folder can sit unused. The forms still work in pure-static mode via `mailto:info@goodway.ae` until you flip the switch.

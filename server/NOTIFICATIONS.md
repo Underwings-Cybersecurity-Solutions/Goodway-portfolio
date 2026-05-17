@@ -41,12 +41,12 @@ Free tier: 3,000 emails/month, 100/day. More than enough for B2B leads.
 4. **Edit `server/.env`:**
    ```
    RESEND_API_KEY=re_yourkey...
-   NOTIFY_TO=gwayuae@outlook.com
+   NOTIFY_TO=info@goodway.ae
    NOTIFY_FROM=Goodway Website <no-reply@goodway.ae>
    ```
 5. **Restart the server:** Ctrl+C then `npm start`.
 6. **Test:** submit a test quote at `https://goodway.ae/contact#quote`.
-   You should get an email at `gwayuae@outlook.com` within 30 seconds.
+   You should get an email at `info@goodway.ae` within 30 seconds.
 
 ### Option B — Postmark (alternative, similar setup)
 
@@ -60,7 +60,7 @@ reputation and slightly different DNS records.
 4. Edit `server/.env`:
    ```
    POSTMARK_API_KEY=your-server-token
-   NOTIFY_TO=gwayuae@outlook.com
+   NOTIFY_TO=info@goodway.ae
    NOTIFY_FROM=Goodway Website <no-reply@goodway.ae>
    ```
 5. Restart, test.
@@ -149,7 +149,7 @@ tail -f server/data/leads-inbox.log    # watch leads come in
 | Setup time | What you get | What you pay |
 |---|---|---|
 | 0 min (default) | Local log + admin Leads page | Free |
-| 5 min (Resend) | + Email to gwayuae@outlook.com | Free up to 3,000/month |
+| 5 min (Resend) | + Email to info@goodway.ae | Free up to 3,000/month |
 | 10 min (Postmark) | + Email with stronger deliverability | $15/month |
 | 5 min (Slack webhook) | + Slack channel ping | Free |
 | 5 min (Zapier webhook) | + Anywhere Zapier can route to | Free 100/month |

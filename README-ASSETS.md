@@ -282,4 +282,4 @@ When `/assets/images/` exceeds 50 MB on disk, mirror it to a CDN:
 - Commissioned photography: licence is `exclusive-transfer` by default.
 - Stock imagery: keep the source URL + licence key in `CREDITS.yml`.
 
-Questions → gwayuae@outlook.com
+Questions → info@goodway.ae

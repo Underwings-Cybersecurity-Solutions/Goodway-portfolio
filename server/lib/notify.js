@@ -10,7 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const TO    = process.env.NOTIFY_TO    || 'gwayuae@outlook.com';
+const TO    = process.env.NOTIFY_TO    || 'info@goodway.ae';
 const FROM  = process.env.NOTIFY_FROM  || 'Goodway Website <no-reply@goodway.ae>';
 const RESEND_KEY   = process.env.RESEND_API_KEY || '';
 const POSTMARK_KEY = process.env.POSTMARK_API_KEY || '';
