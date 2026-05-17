@@ -1675,6 +1675,17 @@ form input:focus, form select:focus, form textarea:focus { border-color: var(--g
 .company-description > * { margin: 0; }
 .company-description img { margin-left: 0 !important; }
 .company-description .paragraph { max-width: 36ch; line-height: 1.55; }
+/* Address paragraph (the emoji-prefixed Operations / P.O. Box block) needs
+   more room than the 36ch intro copy — otherwise "Mussafah Industrial
+   Area, M-14, Abu Dhabi, UAE" wraps mid-line and the orphaned tail jumps
+   back to the left edge under the 📍 icon, breaking visual alignment.
+   The `+ .paragraph` sibling selector keeps the intro paragraph's tight
+   wrap intact. `text-wrap: pretty` gives a balanced break on the narrow
+   viewports where the column itself forces a wrap. */
+.company-description .paragraph + .paragraph {
+  max-width: 64ch;
+  text-wrap: pretty;
+}
 .company-socmed { margin-top: 6px; }
 /* Mobile: drop the column-level bleed so the company-info text aligns
    with Quick Links / Contact / Request Catalogue headings. The logo
