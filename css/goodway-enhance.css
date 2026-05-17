@@ -4124,6 +4124,14 @@ a.image-placeholder > img {
   display: block;
   border-radius: 0;
 }
+/* Portrait-orientation photos (e.g. the UAE flag-raising shot on /about)
+   would lose head + flag-pole when crop-fitted to the landscape slot.
+   Self-targeted via the filename so it doesn't affect any other image. */
+.gw-whoweare__img img[src*="whoweare-flag"] {
+  object-fit: contain;
+  background: var(--gw-paper, #fdfaf1);
+  padding: 6px;
+}
 .gw-whoweare__img--a {
   left: 0;
   top: 8%;
