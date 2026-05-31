@@ -446,29 +446,52 @@
     var banner = doc.createElement('div');
     banner.className = 'gw-cookie';
     banner.setAttribute('role', 'dialog');
+    banner.setAttribute('aria-modal', 'false');
     banner.setAttribute('aria-live', 'polite');
     banner.setAttribute('aria-label', 'Cookie consent');
+    banner.setAttribute('aria-describedby', 'gw-cookie-text');
     banner.innerHTML =
-      '<div class="gw-cookie__text">We use essential cookies for site functionality and anonymous analytics to improve our service. See our <a href="privacy.html">Privacy Policy</a>.</div>' +
+      '<div class="gw-cookie__text" id="gw-cookie-text">We use essential cookies for site functionality and anonymous analytics to improve our service. See our <a href="privacy.html">Privacy Policy</a>.</div>' +
       '<div class="gw-cookie__actions">' +
         '<button type="button" class="gw-cookie__btn gw-cookie__btn--ghost" data-choice="reject">Reject</button>' +
         '<button type="button" class="gw-cookie__btn gw-cookie__btn--primary" data-choice="accept">Accept</button>' +
       '</div>';
     doc.body.appendChild(banner);
+    var rejectBtn = banner.querySelector('[data-choice="reject"]');
+    var acceptBtn = banner.querySelector('[data-choice="accept"]');
     setTimeout(function () {
       banner.classList.add('is-visible');
       doc.body.classList.add('gw-cookie-visible');
+      /* Move focus into the banner so keyboard / SR users land on it */
+      if (acceptBtn) acceptBtn.focus();
     }, 400);
+
+    function dismiss(choice) {
+      localStorage.setItem(KEY, choice);
+      banner.classList.remove('is-visible');
+      doc.body.classList.remove('gw-cookie-visible');
+      doc.removeEventListener('keydown', onKeydown, true);
+      setTimeout(function () { banner.remove(); }, 300);
+      if (choice === 'accept' && typeof window.gtag === 'function') {
+        window.gtag('consent', 'update', { analytics_storage: 'granted' });
+      }
+    }
+
+    /* Escape = reject (the privacy-preserving default); Tab is trapped
+       between the two buttons so focus can't wander behind the dialog. */
+    function onKeydown(e) {
+      if (e.key === 'Escape') { e.preventDefault(); dismiss('reject'); return; }
+      if (e.key !== 'Tab') return;
+      var first = rejectBtn, last = acceptBtn;
+      if (e.shiftKey && doc.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && doc.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+    doc.addEventListener('keydown', onKeydown, true);
+
     banner.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-choice]');
       if (!btn) return;
-      localStorage.setItem(KEY, btn.dataset.choice);
-      banner.classList.remove('is-visible');
-      doc.body.classList.remove('gw-cookie-visible');
-      setTimeout(function () { banner.remove(); }, 300);
-      if (btn.dataset.choice === 'accept' && typeof window.gtag === 'function') {
-        window.gtag('consent', 'update', { analytics_storage: 'granted' });
-      }
+      dismiss(btn.dataset.choice);
     });
   })();
 
@@ -1022,6 +1045,21 @@
     /* Twitter large-card image alongside og:image */
     ensureMeta('twitter:image',   SHARE_CARD);
     ensureMeta('twitter:image:alt', 'Good Way General Trading — authorised UAE distributor');
+
+    /* ------------------------------------------------------------
+       og:url — mirror the page's canonical so shares resolve to the
+       right URL variant. Always emit the PRODUCTION url even on dev,
+       where gwCanonicalDev() has rewritten the canonical to the local
+       origin: map localhost / 127.x back to https://goodway.ae.
+       ------------------------------------------------------------ */
+    var canonEl = doc.head.querySelector('link[rel="canonical"]');
+    var pageUrl = canonEl ? (canonEl.getAttribute('href') || '') : '';
+    pageUrl = pageUrl.replace(/^https?:\/\/(?:localhost|127\.[\d.]+)(?::\d+)?/, 'https://goodway.ae');
+    if (pageUrl) {
+      var ogUrl = doc.head.querySelector('meta[property="og:url"]');
+      if (ogUrl) ogUrl.setAttribute('content', pageUrl);
+      else       ensureMeta('og:url', pageUrl, 'property');
+    }
 
     /* ------------------------------------------------------------
        Google Search Console verification — reads from the GSC_TOKEN

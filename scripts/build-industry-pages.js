@@ -357,6 +357,7 @@ function page(s) {
   <link href="../images/goodway-logo.png" rel="shortcut icon"><link href="../images/goodway-logo.png" rel="apple-touch-icon"><link href="../site.webmanifest" rel="manifest"><meta name="theme-color" content="#0e1a2b"><meta name="robots" content="index,follow"><meta name="twitter:card" content="summary_large_image"><meta property="og:type" content="website">
 </head>
 <body>
+  <a class="gw-skip-link" href="#main">Skip to main content</a>
 ${NAV}
 
   <nav class="gw-breadcrumb" aria-label="Breadcrumb">
