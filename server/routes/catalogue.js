@@ -20,15 +20,15 @@ const { resolveDoc } = require('../lib/docs');
 
 const router = express.Router();
 
-router.post('/', express.urlencoded({ extended: true }), async function (req, res) {
+router.post('/', express.urlencoded({ extended: true }), function (req, res) {
   const body = req.body || {};
-  const email = String(body.email || '').trim();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return res.status(400).json({ ok: false, error: 'Invalid email' });
-  }
-  /* Honeypot */
+  /* Honeypot — check first so bots get a silent success, not validation hints */
   if (body.website && String(body.website).trim()) {
     return res.json({ ok: true });
+  }
+  const email = String(body.email || '').trim().slice(0, 200);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ ok: false, error: 'Invalid email' });
   }
 
   const company = String(body.company || '').trim().slice(0, 200);
@@ -40,7 +40,7 @@ router.post('/', express.urlencoded({ extended: true }), async function (req, re
   try {
     const info = db.prepare(`
       INSERT INTO quotes (name, company, email, phone, sector, division, location, timeline, spec, source, ip, user_agent)
-      VALUES (@name, @company, @email, @phone, NULL, NULL, NULL, NULL, @spec, @source, @ip, @ua)
+      VALUES (@name, @company, @email, @phone, NULL, NULL, NULL, NULL, @spec, @source, @ip, @user_agent)
     `).run({
       name: company || 'Document download',
       company,
@@ -49,7 +49,7 @@ router.post('/', express.urlencoded({ extended: true }), async function (req, re
       spec: 'Requested the ' + d.label + '.',
       source: d.key,
       ip: (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').toString().split(',')[0].trim(),
-      ua: (req.headers['user-agent'] || '').toString().slice(0, 300)
+      user_agent: (req.headers['user-agent'] || '').toString().slice(0, 300)
     });
     leadId = info.lastInsertRowid;
     notifyNewLead({
