@@ -681,6 +681,14 @@
   (function gwDocDownload() {
     var CATALOGUE_API = window.GW_CATALOGUE_API || '/api/catalogue';
     var DOC_LABELS = { 'company-profile': 'Company Profile', 'brochure': 'Brochure' };
+    /* Public PDF served from the same origin as the page, so the download works
+       with no backend. Override the base before enhance.js loads to use a CDN:
+         <script>window.GW_DOC_BASE = 'https://cdn.goodway.ae/assets/';</script> */
+    var DOC_BASE = window.GW_DOC_BASE || '/assets/';
+    var DOC_FILES = {
+      'company-profile': DOC_BASE + 'goodway-company-profile.pdf',
+      'brochure':        DOC_BASE + 'goodway-brochure.pdf'
+    };
     var lastTrigger = null;
 
     /* --- Build the modal once --- */
@@ -698,7 +706,7 @@
         '<div class="gw-docmodal__dialog">' +
           '<button type="button" class="gw-docmodal__close" data-gw-doc-close aria-label="Close">&times;</button>' +
           '<h2 class="gw-docmodal__title" id="gw-docmodal-title">Download our documents</h2>' +
-          '<p class="gw-docmodal__lede">Tell us who you are and we\'ll open your document straight away.</p>' +
+          '<p class="gw-docmodal__lede">Tell us who you are and your document downloads straight away.</p>' +
           '<form class="gw-docmodal__form" novalidate>' +
             '<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" ' +
               'style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden">' +
@@ -764,6 +772,17 @@
       if (lastTrigger && typeof lastTrigger.focus === 'function') lastTrigger.focus();
     }
 
+    /* Force a download of a same-origin file via a synthetic <a download>. */
+    function triggerDownload(url) {
+      var a = doc.createElement('a');
+      a.href = url;
+      a.download = '';
+      a.rel = 'noopener';
+      doc.body.appendChild(a);
+      a.click();
+      doc.body.removeChild(a);
+    }
+
     function wireSubmit(wrap) {
       var form = wrap.querySelector('.gw-docmodal__form');
       if (!form || form.__gwWired) return;
@@ -781,24 +800,29 @@
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errEl.textContent = 'Please enter a valid email.'; form.email.focus(); return; }
         if (phone.replace(/[^0-9]/g, '').length < 6) { errEl.textContent = 'Please enter a valid contact number.'; form.phone.focus(); return; }
 
+        var label = DOC_LABELS[docVal] || 'document';
+        var fileUrl = DOC_FILES[docVal] || DOC_FILES['company-profile'];
+
+        /* Capture the lead in the background — best-effort, never blocks the
+           download. Works when the Node server is reachable; silently ignored
+           otherwise (the document still downloads). */
         var payload = new URLSearchParams({ company: company, email: email, phone: phone, doc: docVal });
-        fetch(CATALOGUE_API, { method: 'POST', body: payload })
-          .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
-          .then(function (data) {
-            if (typeof showToast === 'function') showToast(data.message || 'Thanks — your document is on its way.', 'success');
-            if (data.url) setTimeout(function () { window.open(data.url, '_blank', 'noopener'); }, 350);
-            form.reset();
-            closeModal();
+        try { fetch(CATALOGUE_API, { method: 'POST', body: payload, keepalive: true }).catch(function () {}); } catch (e) {}
+
+        /* Deliver the document straight away. A HEAD check lets us show a
+           friendly message if the PDF hasn't been uploaded yet, instead of a
+           broken link. If HEAD itself is blocked (e.g. opened via file://),
+           just attempt the download. */
+        function ok() { if (typeof showToast === 'function') showToast('Thanks — your ' + label + ' is downloading.', 'success'); }
+        fetch(fileUrl, { method: 'HEAD' })
+          .then(function (r) {
+            if (r.ok) { triggerDownload(fileUrl); ok(); }
+            else if (typeof showToast === 'function') { showToast('Thanks — we will email your ' + label + ' shortly.', 'success'); }
           })
-          .catch(function () {
-            var label = DOC_LABELS[docVal] || 'document';
-            var mailto = 'mailto:info@goodway.ae?subject=' + encodeURIComponent(label + ' request') +
-              '&body=' + encodeURIComponent('Please send the Goodway ' + label + ' to ' + email +
-                ' (company: ' + company + ', phone: ' + phone + ').');
-            window.location.href = mailto;
-            if (typeof showToast === 'function') showToast('Opening your email app to request the ' + label + '.', 'success');
-            closeModal();
-          });
+          .catch(function () { triggerDownload(fileUrl); ok(); });
+
+        form.reset();
+        closeModal();
       });
     }
 
