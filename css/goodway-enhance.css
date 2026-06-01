@@ -5490,3 +5490,73 @@ h1.h2-default {
   a { color: #000 !important; text-decoration: none !important; }
   a[href^="mailto:"]::after, a[href^="tel:"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
 }
+
+/* ============================================================
+   Gated document download — modal + triggers
+   ============================================================ */
+.gw-docmodal[hidden] { display: none; }
+.gw-docmodal {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.25rem;
+}
+.gw-docmodal__backdrop {
+  position: absolute; inset: 0;
+  background: rgba(8, 16, 28, 0.72);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+.gw-docmodal__dialog {
+  position: relative;
+  width: 100%; max-width: 30rem;
+  background: #0e1a2b;
+  color: #e8eef6;
+  border: 1px solid rgba(180, 220, 150, 0.25);
+  border-radius: 14px;
+  padding: 1.75rem 1.75rem 2rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  max-height: 90vh; overflow-y: auto;
+}
+.gw-docmodal__close {
+  position: absolute; top: 0.75rem; right: 0.85rem;
+  width: 2rem; height: 2rem; line-height: 1;
+  background: transparent; color: #cdd7e3;
+  border: 0; border-radius: 8px; font-size: 1.5rem; cursor: pointer;
+}
+.gw-docmodal__close:hover, .gw-docmodal__close:focus-visible { background: rgba(255,255,255,0.08); color: #fff; }
+.gw-docmodal__title { margin: 0 0 0.35rem; font-size: 1.3rem; }
+.gw-docmodal__lede { margin: 0 0 1.25rem; font-size: 0.92rem; color: #aebccd; }
+.gw-docmodal__field { margin-bottom: 0.9rem; display: flex; flex-direction: column; gap: 0.35rem; }
+.gw-docmodal__field label { font-size: 0.82rem; font-weight: 600; color: #cdd7e3; }
+.gw-docmodal__field input {
+  width: 100%; padding: 0.7rem 0.85rem;
+  background: rgba(255,255,255,0.05); color: #fff;
+  border: 1px solid rgba(255,255,255,0.18); border-radius: 9px; font-size: 0.95rem;
+}
+.gw-docmodal__field input:focus-visible { outline: 2px solid #b6dc96; outline-offset: 1px; border-color: #b6dc96; }
+.gw-docmodal__choice { border: 0; margin: 0 0 1.1rem; padding: 0; }
+.gw-docmodal__choice legend { font-size: 0.82rem; font-weight: 600; color: #cdd7e3; margin-bottom: 0.5rem; }
+.gw-docmodal__choice-row { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.gw-docmodal__choice-row label {
+  flex: 1 1 8rem; display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.6rem 0.75rem; border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 9px; cursor: pointer; font-size: 0.9rem;
+}
+.gw-docmodal__choice-row input:checked + span { font-weight: 700; }
+.gw-docmodal__submit {
+  width: 100%; padding: 0.85rem 1rem; margin-top: 0.25rem;
+  background: #b6dc96; color: #0e1a2b; font-weight: 700; font-size: 0.98rem;
+  border: 0; border-radius: 10px; cursor: pointer;
+}
+.gw-docmodal__submit:hover, .gw-docmodal__submit:focus-visible { background: #c8e9ac; }
+.gw-docmodal__error { color: #ffb4b4; font-size: 0.8rem; min-height: 1rem; margin-top: -0.4rem; }
+/* Trigger button reused in the footer where the catalogue box was */
+.gw-doc-cta {
+  display: inline-block; padding: 0.7rem 1.1rem;
+  background: #b6dc96; color: #0e1a2b; font-weight: 700;
+  border: 0; border-radius: 9px; cursor: pointer; font-size: 0.9rem; text-decoration: none;
+}
+.gw-doc-cta:hover, .gw-doc-cta:focus-visible { background: #c8e9ac; }
+@media (prefers-reduced-motion: reduce) {
+  .gw-docmodal__backdrop { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
