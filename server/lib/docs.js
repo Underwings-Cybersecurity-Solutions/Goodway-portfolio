@@ -13,7 +13,7 @@ const DEFAULT_KEY = 'company-profile';
 /**
  * Normalise an arbitrary `doc` input to a known document descriptor.
  * Unknown / missing values fall back to the company profile.
- * @param {string} doc
+ * @param {string|undefined} doc
  * @returns {{ key: string, label: string, file: string }}
  */
 function resolveDoc(doc) {

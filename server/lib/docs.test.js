@@ -25,6 +25,12 @@ test('unknown doc defaults to company-profile', () => {
   assert.strictEqual(resolveDoc('garbage').key, 'company-profile');
 });
 
+test('prototype property names default to company-profile', () => {
+  assert.strictEqual(resolveDoc('constructor').key, 'company-profile');
+  assert.strictEqual(resolveDoc('__proto__').key,   'company-profile');
+  assert.strictEqual(resolveDoc('toString').key,    'company-profile');
+});
+
 test('DOCS contains exactly the two known documents', () => {
   assert.deepStrictEqual(Object.keys(DOCS).sort(), ['brochure', 'company-profile']);
 });
