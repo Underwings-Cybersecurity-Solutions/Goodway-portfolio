@@ -676,6 +676,166 @@
   }
 
   /* ============================================================
+     Gated document download — modal + navbar/footer triggers
+     ============================================================ */
+  (function gwDocDownload() {
+    var CATALOGUE_API = window.GW_CATALOGUE_API || '/api/catalogue';
+    var DOC_LABELS = { 'company-profile': 'Company Profile', 'brochure': 'Brochure' };
+    var lastTrigger = null;
+
+    /* --- Build the modal once --- */
+    function buildModal() {
+      if (doc.getElementById('gw-docmodal')) return doc.getElementById('gw-docmodal');
+      var wrap = doc.createElement('div');
+      wrap.className = 'gw-docmodal';
+      wrap.id = 'gw-docmodal';
+      wrap.setAttribute('role', 'dialog');
+      wrap.setAttribute('aria-modal', 'true');
+      wrap.setAttribute('aria-labelledby', 'gw-docmodal-title');
+      wrap.hidden = true;
+      wrap.innerHTML =
+        '<div class="gw-docmodal__backdrop" data-gw-doc-close></div>' +
+        '<div class="gw-docmodal__dialog">' +
+          '<button type="button" class="gw-docmodal__close" data-gw-doc-close aria-label="Close">&times;</button>' +
+          '<h2 class="gw-docmodal__title" id="gw-docmodal-title">Download our documents</h2>' +
+          '<p class="gw-docmodal__lede">Tell us who you are and we\'ll open your document straight away.</p>' +
+          '<form class="gw-docmodal__form" novalidate>' +
+            '<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" ' +
+              'style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden">' +
+            '<div class="gw-docmodal__field"><label for="gw-doc-company">Company name</label>' +
+              '<input id="gw-doc-company" name="company" type="text" autocomplete="organization" required></div>' +
+            '<div class="gw-docmodal__field"><label for="gw-doc-email">Email</label>' +
+              '<input id="gw-doc-email" name="email" type="email" autocomplete="email" required></div>' +
+            '<div class="gw-docmodal__field"><label for="gw-doc-phone">Contact number</label>' +
+              '<input id="gw-doc-phone" name="phone" type="tel" autocomplete="tel" required></div>' +
+            '<fieldset class="gw-docmodal__choice"><legend>Which document?</legend>' +
+              '<div class="gw-docmodal__choice-row">' +
+                '<label><input type="radio" name="doc" value="company-profile" checked><span>Company Profile</span></label>' +
+                '<label><input type="radio" name="doc" value="brochure"><span>Brochure</span></label>' +
+              '</div></fieldset>' +
+            '<p class="gw-docmodal__error" data-gw-doc-error role="alert"></p>' +
+            '<button type="submit" class="gw-docmodal__submit">Download now</button>' +
+          '</form>' +
+        '</div>';
+      doc.body.appendChild(wrap);
+      wrap.addEventListener('click', function (e) {
+        if (e.target.hasAttribute('data-gw-doc-close')) closeModal();
+      });
+      doc.addEventListener('keydown', function (e) {
+        if (!wrap.hidden && e.key === 'Escape') closeModal();
+        if (!wrap.hidden && e.key === 'Tab') trapFocus(e, wrap);
+      });
+      wireSubmit(wrap);
+      return wrap;
+    }
+
+    function focusables(root) {
+      return Array.prototype.slice.call(root.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )).filter(function (el) { return el.offsetParent !== null || el === doc.activeElement; });
+    }
+
+    function trapFocus(e, wrap) {
+      var f = focusables(wrap.querySelector('.gw-docmodal__dialog'));
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && doc.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && doc.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+
+    function openModal(preferDoc, trigger) {
+      var wrap = buildModal();
+      lastTrigger = trigger || null;
+      if (preferDoc && DOC_LABELS[preferDoc]) {
+        var radio = wrap.querySelector('input[name="doc"][value="' + preferDoc + '"]');
+        if (radio) radio.checked = true;
+      }
+      wrap.hidden = false;
+      var firstField = wrap.querySelector('#gw-doc-company');
+      if (firstField) firstField.focus();
+    }
+
+    function closeModal() {
+      var wrap = doc.getElementById('gw-docmodal');
+      if (!wrap) return;
+      wrap.hidden = true;
+      var err = wrap.querySelector('[data-gw-doc-error]');
+      if (err) err.textContent = '';
+      if (lastTrigger && typeof lastTrigger.focus === 'function') lastTrigger.focus();
+    }
+
+    function wireSubmit(wrap) {
+      var form = wrap.querySelector('.gw-docmodal__form');
+      if (!form || form.__gwWired) return;
+      form.__gwWired = true;
+      var errEl = form.querySelector('[data-gw-doc-error]');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        errEl.textContent = '';
+        var company = form.company.value.trim();
+        var email = form.email.value.trim();
+        var phone = form.phone.value.trim();
+        var docVal = (form.querySelector('input[name="doc"]:checked') || {}).value || 'company-profile';
+        if (form.website && form.website.value) return; /* bot */
+        if (!company) { errEl.textContent = 'Please enter your company name.'; form.company.focus(); return; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errEl.textContent = 'Please enter a valid email.'; form.email.focus(); return; }
+        if (phone.replace(/[^0-9]/g, '').length < 6) { errEl.textContent = 'Please enter a valid contact number.'; form.phone.focus(); return; }
+
+        var payload = new URLSearchParams({ company: company, email: email, phone: phone, doc: docVal });
+        fetch(CATALOGUE_API, { method: 'POST', body: payload })
+          .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+          .then(function (data) {
+            if (typeof showToast === 'function') showToast(data.message || 'Thanks — your document is on its way.', 'success');
+            if (data.url) setTimeout(function () { window.open(data.url, '_blank', 'noopener'); }, 350);
+            form.reset();
+            closeModal();
+          })
+          .catch(function () {
+            var label = DOC_LABELS[docVal] || 'document';
+            var mailto = 'mailto:info@goodway.ae?subject=' + encodeURIComponent(label + ' request') +
+              '&body=' + encodeURIComponent('Please send the Goodway ' + label + ' to ' + email +
+                ' (company: ' + company + ', phone: ' + phone + ').');
+            window.location.href = mailto;
+            if (typeof showToast === 'function') showToast('Opening your email app to request the ' + label + '.', 'success');
+            closeModal();
+          });
+      });
+    }
+
+    /* --- Trigger 1: navbar link --- */
+    var navHost = doc.querySelector('.nav-menu .nav-menu-item');
+    if (navHost && !navHost.querySelector('[data-gw-doc-trigger]')) {
+      var navLink = doc.createElement('a');
+      navLink.href = '#';
+      navLink.className = 'nav-link w-nav-link';
+      navLink.textContent = 'Company Profile';
+      navLink.setAttribute('data-gw-doc-trigger', 'company-profile');
+      navHost.appendChild(navLink);
+    }
+
+    /* --- Trigger 2: replace the footer "Request Catalogue" box --- */
+    var footerForm = doc.getElementById('email-form');
+    if (footerForm) {
+      var cta = doc.createElement('button');
+      cta.type = 'button';
+      cta.className = 'gw-doc-cta';
+      cta.textContent = 'Download Brochure / Company Profile';
+      cta.setAttribute('data-gw-doc-trigger', 'company-profile');
+      footerForm.parentNode.replaceChild(cta, footerForm);
+    }
+
+    /* --- Delegated open handler for any trigger --- */
+    doc.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-gw-doc-trigger]');
+      if (!t) return;
+      e.preventDefault();
+      openModal(t.getAttribute('data-gw-doc-trigger'), t);
+    });
+
+    window.__gwOpenDocModal = openModal; /* exposed for manual testing */
+  })();
+
+  /* ============================================================
      13. Breadcrumbs — auto-injected on division pages
      ============================================================ */
   (function () {
@@ -1251,7 +1411,7 @@
             telephone: '+971564423539',
             vatID: '100464283900003', taxID: 'CN-1843054',
             foundingDate: '2014',
-            address: { '@type': 'PostalAddress', addressLocality: 'Abu Dhabi', addressRegion: 'Abu Dhabi', postalCode: '10422', addressCountry: 'AE' },
+            address: { '@type': 'PostalAddress', streetAddress: 'Office No. B33, Al Sarab Commercial Centre, Mussafah Industrial Area, M-14', addressLocality: 'Abu Dhabi', addressRegion: 'Abu Dhabi', postalCode: '10422', addressCountry: 'AE' },
             areaServed: { '@type': 'Country', name: 'United Arab Emirates' }
           },
           {
@@ -1259,8 +1419,8 @@
             name: 'Good Way General Trading', image: BASE + '/images/goodway-logo.png',
             url: BASE + '/', telephone: '+971564423539', email: 'info@goodway.ae',
             priceRange: '$$',
-            address: { '@type': 'PostalAddress', postOfficeBoxNumber: '10422', addressLocality: 'Abu Dhabi', addressRegion: 'Abu Dhabi', addressCountry: 'AE' },
-            openingHours: 'Mo-Fr 08:00-17:00'
+            address: { '@type': 'PostalAddress', streetAddress: 'Office No. B33, Al Sarab Commercial Centre, Mussafah Industrial Area, M-14', postOfficeBoxNumber: '10422', addressLocality: 'Abu Dhabi', addressRegion: 'Abu Dhabi', addressCountry: 'AE' },
+            openingHours: 'Mo-Sa 08:00-17:00'
           }
         ]
       });
@@ -1821,7 +1981,7 @@
         .then(function (out) {
           clearTimeout(timeout);
           if (!out || out.ok !== true) throw new Error('Server declined');
-          toast('Thanks — we received your enquiry and will reply within one business day.', true);
+          toast('Thanks — we received your enquiry and will reply within 48 hours.', true);
           try { sessionStorage.removeItem('gw-form-' + (form.getAttribute('data-gw-form'))); } catch (e) {}
           form.reset();
           form.dataset.gwSubmitting = '0';
