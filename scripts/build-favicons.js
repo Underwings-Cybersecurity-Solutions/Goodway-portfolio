@@ -21,17 +21,6 @@ const PNGS = [
   { size: 32,  name: 'favicon-32x32.png' },
   { size: 48,  name: 'favicon-48x48.png' },
   { size: 96,  name: 'favicon-96x96.png' },
-  // Apple touch icons
-  { size: 57,  name: 'apple-touch-icon-57x57.png' },
-  { size: 60,  name: 'apple-touch-icon-60x60.png' },
-  { size: 72,  name: 'apple-touch-icon-72x72.png' },
-  { size: 76,  name: 'apple-touch-icon-76x76.png' },
-  { size: 114, name: 'apple-touch-icon-114x114.png' },
-  { size: 120, name: 'apple-touch-icon-120x120.png' },
-  { size: 144, name: 'apple-touch-icon-144x144.png' },
-  { size: 152, name: 'apple-touch-icon-152x152.png' },
-  { size: 167, name: 'apple-touch-icon-167x167.png' },
-  { size: 180, name: 'apple-touch-icon-180x180.png' },
   // Android Chrome / PWA
   { size: 192, name: 'android-chrome-192x192.png' },
   { size: 256, name: 'android-chrome-256x256.png' },
@@ -40,9 +29,7 @@ const PNGS = [
   // Windows / Microsoft tiles
   { size: 70,  name: 'mstile-70x70.png' },
   { size: 150, name: 'mstile-150x150.png' },
-  { size: 310, name: 'mstile-310x310.png' },
-  // OG / social card fallback
-  { size: 1200, name: 'og-image-1200x630.png', width: 1200, height: 630, fit: 'contain', background: '#faf6ec' }
+  { size: 310, name: 'mstile-310x310.png' }
 ];
 
 async function main() {
@@ -102,14 +89,6 @@ async function main() {
   fs.writeFileSync(icoPath, icoBuf([ico16, ico32, ico48]));
   const icoStat = fs.statSync(icoPath);
   console.log(' ✓', 'favicon.ico (16/32/48 multi)'.padEnd(34), (icoStat.size / 1024).toFixed(1) + ' KB');
-
-  /* Copy existing Safari mask SVG into /favicon/ for consistent pathing */
-  const maskSrc = path.join(ROOT, 'images', 'goodway-mask.svg');
-  const maskDst = path.join(OUT, 'safari-pinned-tab.svg');
-  if (fs.existsSync(maskSrc)) {
-    fs.copyFileSync(maskSrc, maskDst);
-    console.log(' ✓', 'safari-pinned-tab.svg (copied)'.padEnd(34));
-  }
 
   console.log(`\nAll icons written to: ${path.relative(ROOT, OUT)}/`);
   console.log(`favicon.ico written to: images/favicon.ico`);
