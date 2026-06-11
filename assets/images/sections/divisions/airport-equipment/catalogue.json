@@ -1,0 +1,37 @@
+[
+  {
+    "folder": "screening-tray",
+    "slug": "screening-tray",
+    "title": "Airport security screening trays",
+    "lede": "Heavy-duty passenger screening trays for airport checkpoint conveyors &mdash; stackable, impact-resistant and custom-branded to the operator&rsquo;s livery (shown here in Abu Dhabi Airports Company / ADAC colours). Sized to fit standard X-ray tunnels and return-belt systems.",
+    "bullets": [
+      "Impact-resistant polypropylene construction",
+      "Nestable / stackable to save belt-side space",
+      "Custom colour &amp; printed branding (operator livery)",
+      "Sized for standard X-ray tunnel &amp; return-belt systems",
+      "Smooth radius corners &mdash; easy cleaning, no snag points",
+      "Optional anti-slip base &amp; RFID-tag pocket"
+    ],
+    "images": [
+      { "file": "01.webp", "kb": "75.0" },
+      { "file": "02.webp", "kb": "72.4" }
+    ]
+  },
+  {
+    "folder": "follow-me-board",
+    "slug": "follow-me-board",
+    "title": "&ldquo;Follow Me&rdquo; LED guidance boards",
+    "lede": "Roof-mounted programmable LED &ldquo;FOLLOW ME&rdquo; boards for airport marshalling and apron-guidance vehicles. High-brightness amber matrix readable in direct sunlight, paired with rotating beacons for airside visibility during aircraft and vehicle escort.",
+    "bullets": [
+      "High-brightness amber LED matrix &mdash; sunlight readable",
+      "Programmable scrolling / static messages",
+      "Roof-bar mount with twin rotating beacons",
+      "12/24 V airside vehicle power, weather-sealed (IP-rated)",
+      "Front &amp; optional rear display faces",
+      "Wide operating-temperature range for apron use"
+    ],
+    "images": [
+      { "file": "01.webp", "kb": "84.9" }
+    ]
+  }
+]
