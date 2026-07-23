@@ -163,14 +163,193 @@ function writeCareers() {
   return true;
 }
 
+/* ---------- Blog / Journal ---------- */
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function fmtDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ''));
+  if (!m) return { day: String(iso || ''), rest: '', full: String(iso || '') };
+  const day = String(parseInt(m[3], 10));
+  const mon = MONTHS[parseInt(m[2], 10) - 1] || '';
+  return { day: day, rest: mon + ' ' + m[1], full: day + ' ' + mon + ' ' + m[1] };
+}
+function readTime(body) {
+  const words = String(body || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200)) + ' min read';
+}
+
+function publishedPosts() {
+  return db.prepare('SELECT * FROM posts WHERE is_published = 1 ORDER BY published_date DESC, id DESC').all();
+}
+
+/* The managed items injected between the GW-JOURNAL markers on journal.html. */
+function renderJournalList() {
+  const rows = publishedPosts();
+  if (!rows.length) return '\n          ';
+  return '\n' + rows.map(function (p) {
+    const d = fmtDate(p.published_date);
+    return [
+      '          <a href="journal/' + escAttr(p.slug) + '.html" class="gw-journal-item">',
+      '            <div class="gw-journal-item__date"><strong>' + esc(d.day) + '</strong><span>' + esc(d.rest) + '</span></div>',
+      '            <div class="gw-journal-item__body">',
+      '              <h3>' + esc(p.title) + '</h3>',
+      '              <div class="gw-journal-item__meta">' + esc(p.category) + ' &middot; ' + esc(readTime(p.body)) + '</div>',
+      '              <p class="gw-journal-item__excerpt">' + esc(p.excerpt) + '</p>',
+      '            </div>',
+      '          </a>'
+    ].join('\n');
+  }).join('\n\n') + '\n\n          ';
+}
+
+/* A complete journal/<slug>.html article page, generated from a post row. */
+function renderPostPage(p) {
+  const d = fmtDate(p.published_date);
+  const rt = readTime(p.body);
+  const desc = escAttr(p.meta_description || p.excerpt || '');
+  const title = esc(p.title);
+  const cover = p.image_path
+    ? '          <img class="gw-article__cover" src="../' + escAttr(p.image_path) + '" alt="' + title + '" loading="lazy" style="width:100%;border-radius:14px;margin:0 0 1.6rem;display:block">\n'
+    : '';
+  const ctaButton = (p.cta_href && p.cta_label)
+    ? '            <a href="../' + escAttr(p.cta_href) + '" class="main-button-white w-inline-block gw-article-cta__primary"><div class="p1-default semibold-white">' + esc(p.cta_label) + '</div></a>\n'
+    : '';
+  const nav = [
+    '  <div data-animation="over-right" data-collapse="medium" data-duration="400" role="banner" class="navbar w-nav">',
+    '    <div class="container"><div class="navbar-wrap">',
+    '      <a href="../index.html" class="logo-brand w-nav-brand"><img src="../images/goodway-logo.png" width="180" alt="Good Way General Trading"></a>',
+    '      <nav role="navigation" aria-label="Primary" class="nav-menu w-nav-menu"><div class="nav-menu-item">',
+    '        <a href="../about.html" class="nav-link w-nav-link">About Us</a>',
+    '        <a href="../services.html" class="nav-link w-nav-link">What We Do</a>',
+    '        <a href="../principals.html" class="nav-link w-nav-link">Principals</a>',
+    '        <a href="../industries.html" class="nav-link w-nav-link">Industries</a>',
+    '        <a href="../journal.html" aria-current="page" class="nav-link w-nav-link w--current">Journal</a>',
+    '        <a href="../careers.html" class="nav-link w-nav-link">Careers</a>',
+    '      </div><div class="button-menu"><a href="../contact.html" class="button-outline w-inline-block"><div class="p1-default">Contact Us</div></a></div></nav>',
+    '      <div class="menu-button w-nav-button"><div class="menu-icon-line"><div class="menu-line-top"></div><div class="menu-line-middle"></div><div class="menu-line-bottom"></div></div></div>',
+    '    </div></div>',
+    '  </div>'
+  ].join('\n');
+  const footer = [
+    '  <footer class="footer">',
+    '    <div class="container"><div class="footer-wrap">',
+    '      <div class="footer-company">',
+    '        <div class="company-description"><a href="../index.html" class="footer-logo-link" aria-label="Goodway — back to homepage"><img src="../images/goodway-logo.png" loading="lazy" width="160" alt="Good Way General Trading"></a>',
+    '          <div class="paragraph regular-light-grey"><strong>Good Way General Trading</strong> &mdash; a national establishment with international expertise since 2014.</div>',
+    '        </div>',
+    '      </div>',
+    '      <div class="footer-menu"><div class="div-block-3">',
+    '        <div class="menu-quick-links">',
+    '          <div class="paragraph bold-white">Quick Links</div>',
+    '          <a href="../about.html" class="footer-link">About</a>',
+    '          <a href="../principals.html" class="footer-link">Principals</a>',
+    '          <a href="../industries.html" class="footer-link">Industries</a>',
+    '          <a href="../journal.html" class="footer-link">Journal</a>',
+    '          <a href="../careers.html" class="footer-link">Careers</a>',
+    '          <a href="../contact.html" class="footer-link">Contact</a>',
+    '        </div>',
+    '      </div></div>',
+    '      <div class="footer-bottom">',
+    '        <div class="paragraph regular-gainsboro">&copy; 2026 Good Way General Trading. All Rights Reserved. &middot; <a href="../privacy.html" class="footer-link footer-link--inline">Privacy</a> &middot; <a href="../terms.html" class="footer-link footer-link--inline">Terms</a></div>',
+    '      </div>',
+    '    </div></div>',
+    '  </footer>'
+  ].join('\n');
+  return [
+    '<!DOCTYPE html>',
+    '<html lang="en">',
+    '<head>',
+    '  <meta charset="utf-8">',
+    '  <title>' + title + ' | Goodway Journal</title>',
+    '  <meta name="description" content="' + desc + '">',
+    '  <meta property="og:title" content="' + title + ' | Goodway Journal">',
+    '  <meta property="og:description" content="' + desc + '">',
+    '  <meta property="og:type" content="article">',
+    '  <meta name="viewport" content="width=device-width, initial-scale=1">',
+    '  <link rel="canonical" href="https://goodway.ae/journal/' + escAttr(p.slug) + '">',
+    '  <meta property="og:image" content="https://goodway.ae/images/goodway-logo.png">',
+    '  <link href="../css/normalize.min.css" rel="stylesheet" type="text/css">',
+    '  <link href="../css/webflow.min.css" rel="stylesheet" type="text/css">',
+    '  <link href="../css/green-crescent-consultant.webflow.min.css" rel="stylesheet" type="text/css">',
+    '  <link href="../css/goodway-brand.min.css" rel="stylesheet" type="text/css"><link href="../css/goodway-enhance.min.css" rel="stylesheet">',
+    '  <link href="https://fonts.googleapis.com" rel="preconnect"><link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">',
+    '  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" fetchpriority="high">',
+    '  <link href="../images/goodway-logo.png" rel="shortcut icon" type="image/x-icon"><link href="../images/goodway-logo.png" rel="apple-touch-icon"><link href="../site.webmanifest" rel="manifest"><meta name="theme-color" content="#0e1a2b"><meta name="robots" content="index,follow"><meta name="twitter:card" content="summary_large_image">',
+    '  <script type="application/ld+json">',
+    '  {"@context":"https://schema.org","@type":"Article","headline":' + JSON.stringify(p.title) + ',"author":{"@type":"Organization","name":"Good Way General Trading"},"publisher":{"@type":"Organization","name":"Good Way General Trading","logo":{"@type":"ImageObject","url":"https://goodway.ae/images/goodway-logo.png"}},"datePublished":' + JSON.stringify(p.published_date) + ',"mainEntityOfPage":"https://goodway.ae/journal/' + p.slug + '.html"}',
+    '  </script>',
+    '</head>',
+    '<body>',
+    '  <a class="gw-skip-link" href="#main">Skip to main content</a>',
+    nav,
+    '',
+    '  <main id="main">',
+    '    <section class="gw-industries-hero gw-u-hero-tight">',
+    '      <div class="container">',
+    '        <div class="gw-industries-hero__eyebrow">// ' + esc(p.category) + ' &middot; ' + esc(d.full) + ' &middot; ' + esc(rt) + '</div>',
+    '        <h1 class="gw-industries-hero__title">' + title + '</h1>',
+    '        <p class="gw-industries-hero__lede">' + esc(p.lede || p.excerpt) + '</p>',
+    '      </div>',
+    '    </section>',
+    '',
+    '    <section class="services-section gw-band--linen-soft">',
+    '      <div class="container">',
+    '        <article class="gw-article">',
+    cover + '          ' + (p.body || '') ,
+    '          <p class="gw-article-cta">',
+    ctaButton + '            <a href="../journal.html" class="gw-article-cta__back">&larr; More journal posts</a>',
+    '          </p>',
+    '        </article>',
+    '      </div>',
+    '    </section>',
+    '  </main>',
+    '',
+    footer,
+    '  <script src="../js/goodway-enhance.js" defer></script>',
+    '</body>',
+    '</html>',
+    ''
+  ].join('\n');
+}
+
+const JOURNAL_DIR = path.join(SITE_ROOT, 'journal');
+
+/** Write journal/<slug>.html for every published post. Returns the count. */
+function writePostPages() {
+  if (!fs.existsSync(JOURNAL_DIR)) fs.mkdirSync(JOURNAL_DIR, { recursive: true });
+  const rows = publishedPosts();
+  rows.forEach(function (p) {
+    fs.writeFileSync(path.join(JOURNAL_DIR, p.slug + '.html'), renderPostPage(p));
+  });
+  return rows.length;
+}
+
+/** Remove a generated post page (called on delete/unpublish). */
+function removePostPage(slug) {
+  if (!slug) return;
+  try { fs.unlinkSync(path.join(JOURNAL_DIR, path.basename(slug) + '.html')); } catch (e) {}
+}
+
+/** journal.html list + all post pages. Skips if journal.html/markers are absent. */
+function writeJournal() {
+  const file = path.join(SITE_ROOT, 'journal.html');
+  if (!fs.existsSync(file)) return false;
+  let html = fs.readFileSync(file, 'utf8');
+  if (html.indexOf('<!-- GW-JOURNAL-START -->') === -1) return false;
+  html = replaceBetween(html, '<!-- GW-JOURNAL-START -->', '<!-- GW-JOURNAL-END -->', renderJournalList());
+  fs.writeFileSync(file, html);
+  writePostPages();
+  return true;
+}
+
 function rebuildAll() {
   const principalsWritten = db.prepare('SELECT COUNT(*) AS n FROM principals WHERE is_published = 1').get().n;
   const sectorsWritten    = db.prepare('SELECT COUNT(*) AS n FROM sectors    WHERE is_published = 1').get().n;
   const jobsWritten       = db.prepare('SELECT COUNT(*) AS n FROM jobs       WHERE is_published = 1').get().n;
+  const postsWritten      = db.prepare('SELECT COUNT(*) AS n FROM posts      WHERE is_published = 1').get().n;
   writePrincipals();
   writeSectors();
   const careersWritten = writeCareers();
-  return { principalsWritten, sectorsWritten, jobsWritten, careersWritten };
+  const journalWritten = writeJournal();
+  return { principalsWritten, sectorsWritten, jobsWritten, careersWritten, postsWritten, journalWritten };
 }
 
 if (require.main === module) {
@@ -179,4 +358,4 @@ if (require.main === module) {
               (r.careersWritten ? ', ' + r.jobsWritten + ' jobs' : ' (careers.html not found — skipped)') + '.');
 }
 
-module.exports = { rebuildAll, writePrincipals, writeSectors, writeCareers };
+module.exports = { rebuildAll, writePrincipals, writeSectors, writeCareers, writeJournal, removePostPage };
