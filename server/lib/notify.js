@@ -90,6 +90,51 @@ async function sendWebhook(lead, body) {
   if (!r.ok) throw new Error('Webhook ' + r.status);
 }
 
+/* ---- Job applications (careers.html → POST /api/applications) ---- */
+function renderApplicationBody(app) {
+  const subject = 'New application: ' + (app.name || 'unknown') +
+    (app.job_title ? ' · ' + app.job_title : '');
+  const lines = [
+    'A new job application came in via goodway.ae/careers.',
+    '',
+    'Applicant: ' + (app.name || ''),
+    'Position:  ' + (app.job_title || '(general / no specific opening)'),
+    'Email:     ' + (app.email || ''),
+    'Mobile:    ' + (app.phone || ''),
+    'CV file:   ' + (app.cv_original_name || '(none attached)'),
+    '',
+    'Cover note:',
+    app.cover_note || '(none)',
+    '',
+    'Received from IP ' + (app.ip || 'unknown')
+  ];
+  const text = lines.join('\n');
+  const html = '<pre style="font-family:ui-monospace,monospace;font-size:13px;line-height:1.55;">' +
+               escapeHtml(text) +
+               '</pre>';
+  return { subject, text, html };
+}
+
+async function notifyNewApplication(app) {
+  const body = renderApplicationBody(app);
+  /* Local inbox log — same offline-audit behaviour as leads */
+  try {
+    const logDir = path.resolve(__dirname, '..', 'data');
+    if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+    fs.appendFileSync(
+      path.join(logDir, 'applications-inbox.log'),
+      '\n=== ' + new Date().toISOString() + ' · application #' + (app.id || '?') + ' ===\n' + body.text + '\n'
+    );
+  } catch (e) { console.error('applications inbox log write failed', e); }
+
+  const tasks = [];
+  if (RESEND_KEY)   tasks.push(sendResend(body).catch(e => console.error('Resend send failed:', e.message)));
+  if (POSTMARK_KEY) tasks.push(sendPostmark(body).catch(e => console.error('Postmark send failed:', e.message)));
+  if (WEBHOOK_URL)  tasks.push(sendWebhook({ id: app.id, name: app.name, email: app.email, job_title: app.job_title }, body).catch(e => console.error('Webhook send failed:', e.message)));
+  if (tasks.length === 0) return; // silently no-op when no provider configured
+  await Promise.allSettled(tasks);
+}
+
 async function notifyNewLead(lead) {
   const body = renderBody(lead);
   /* Always append to a local inbox log for audit + offline inspection */
@@ -110,4 +155,4 @@ async function notifyNewLead(lead) {
   await Promise.allSettled(tasks);
 }
 
-module.exports = { notifyNewLead };
+module.exports = { notifyNewLead, notifyNewApplication };

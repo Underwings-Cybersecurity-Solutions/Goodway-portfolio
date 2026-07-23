@@ -1,0 +1,61 @@
+<%- include('../partials/head', { title: 'Application #' + row.id }) %>
+<div class="gwa-shell">
+  <%- include('../partials/nav') %>
+  <main class="gwa-main">
+    <header class="gwa-pagehead">
+      <div>
+        <a href="/admin/applications" class="gwa-crumb">← Applications</a>
+        <h1><%= row.name %></h1>
+        <p class="gwa-sub">Received <%= row.received_at %><%= row.job_title ? ' · ' + row.job_title : '' %></p>
+      </div>
+      <span class="gwa-pill gwa-pill--<%= row.status %>"><%= row.status %></span>
+    </header>
+    <%- include('../partials/flash') %>
+
+    <section class="gwa-card">
+      <dl class="gwa-dl">
+        <div><dt>Applicant</dt><dd><%= row.name %></dd></div>
+        <div><dt>Position</dt><dd><%= row.job_title || '(general / no specific opening)' %></dd></div>
+        <div><dt>Email</dt><dd><a href="mailto:<%= row.email %>"><%= row.email %></a></dd></div>
+        <div><dt>Mobile</dt><dd><% if (row.phone) { %><a href="tel:<%= row.phone.replace(/\s/g, '') %>"><%= row.phone %></a><% } else { %>—<% } %></dd></div>
+        <div><dt>CV</dt><dd>
+          <% if (row.cv_stored_name) { %>
+            <a href="/admin/applications/<%= row.id %>/cv" target="_blank" rel="noopener" class="gwa-btn gwa-btn--ghost">Preview</a>
+            <a href="/admin/applications/<%= row.id %>/cv?dl=1" class="gwa-btn gwa-btn--ghost">Download <%= row.cv_original_name || 'CV' %></a>
+          <% } else { %>
+            <span class="gwa-muted">No CV attached</span>
+          <% } %>
+        </dd></div>
+        <div><dt>Source</dt><dd><%= row.source %></dd></div>
+        <div><dt>IP</dt><dd class="gwa-muted gwa-mono"><%= row.ip || '—' %></dd></div>
+      </dl>
+    </section>
+
+    <section class="gwa-card">
+      <h2>Cover note</h2>
+      <pre class="gwa-pre"><%= row.cover_note || '(none)' %></pre>
+    </section>
+
+    <section class="gwa-card">
+      <h2>Manage</h2>
+      <form method="post" action="/admin/applications/<%= row.id %>/status" class="gwa-form gwa-form--row">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <label class="gwa-field">
+          <span>Status</span>
+          <select name="status">
+            <% statuses.forEach(function (s) { %>
+              <option value="<%= s %>" <%= s === row.status ? 'selected' : '' %>><%= s %></option>
+            <% }); %>
+          </select>
+        </label>
+        <button class="gwa-btn gwa-btn--primary" type="submit">Update status</button>
+      </form>
+      <form method="post" action="/admin/applications/<%= row.id %>/delete" class="gwa-inline-form"
+            onsubmit="return confirm('Delete this application and its CV file? This cannot be undone.');">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <button class="gwa-btn gwa-btn--danger" type="submit">Delete application</button>
+      </form>
+    </section>
+  </main>
+</div>
+</body></html>

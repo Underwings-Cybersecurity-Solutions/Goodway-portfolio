@@ -13,10 +13,13 @@ router.post('/', ensureCsrf, verifyCsrf, function (req, res) {
   try {
     const result = rebuildAll();
     logAudit(req.session.user.username, 'publish', 'site', null,
-             'principals=' + result.principalsWritten + ' sectors=' + result.sectorsWritten);
+             'principals=' + result.principalsWritten + ' sectors=' + result.sectorsWritten + ' jobs=' + result.jobsWritten);
+    const careersMsg = result.careersWritten
+      ? ' and careers.html (' + result.jobsWritten + ' openings)'
+      : '';
     req.session.flash = [{
       kind: 'success',
-      msg: 'Published. principals.html (' + result.principalsWritten + ' brands) and industries.html (' + result.sectorsWritten + ' sectors) regenerated.'
+      msg: 'Published. principals.html (' + result.principalsWritten + ' brands), industries.html (' + result.sectorsWritten + ' sectors)' + careersMsg + ' regenerated.'
     }];
   } catch (e) {
     console.error(e);

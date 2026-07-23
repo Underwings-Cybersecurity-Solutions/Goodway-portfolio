@@ -11,6 +11,11 @@
       Leads
       <% if (typeof newLeads !== 'undefined' && newLeads > 0) { %><span class="gwa-badge"><%= newLeads %></span><% } %>
     </a>
+    <a href="/admin/jobs"       class="gwa-nav__link <%= active === 'jobs'       ? 'is-active' : '' %>">Careers</a>
+    <a href="/admin/applications" class="gwa-nav__link <%= active === 'applications' ? 'is-active' : '' %>">
+      Applications
+      <% if (typeof newApplications !== 'undefined' && newApplications > 0) { %><span class="gwa-badge"><%= newApplications %></span><% } %>
+    </a>
     <a href="/admin/publish"    class="gwa-nav__link <%= active === 'publish'    ? 'is-active' : '' %>">Publish</a>
   </nav>
   <div class="gwa-sidebar__foot">

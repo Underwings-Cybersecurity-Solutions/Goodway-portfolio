@@ -1,0 +1,75 @@
+<%
+  var isNew = !row.id;
+  var action = isNew ? '/admin/jobs/new' : '/admin/jobs/' + row.id + '/edit';
+%>
+<%- include('../partials/head', { title: (isNew ? 'New' : 'Edit') + ' opening' }) %>
+<div class="gwa-shell">
+  <%- include('../partials/nav') %>
+  <main class="gwa-main">
+    <header class="gwa-pagehead">
+      <div>
+        <a href="/admin/jobs" class="gwa-crumb">← Careers</a>
+        <h1><%= isNew ? 'New opening' : row.title %></h1>
+      </div>
+    </header>
+    <%- include('../partials/flash') %>
+    <form method="post" action="<%= action %>" class="gwa-form gwa-card">
+      <input type="hidden" name="_csrf" value="<%= csrf %>">
+      <div class="gwa-form__grid">
+        <label class="gwa-field gwa-col-6">
+          <span>Job title *</span>
+          <input type="text" name="title" value="<%= row.title %>" required maxlength="120" placeholder="Sales Engineer">
+        </label>
+        <label class="gwa-field gwa-col-3">
+          <span>Department</span>
+          <input type="text" name="department" value="<%= row.department %>" maxlength="80" placeholder="Sales">
+        </label>
+        <label class="gwa-field gwa-col-3">
+          <span>Employment type</span>
+          <select name="employment_type">
+            <% types.forEach(function (t) { %>
+              <option value="<%= t.key %>" <%= t.key === row.employment_type ? 'selected' : '' %>><%= t.label %></option>
+            <% }); %>
+          </select>
+        </label>
+        <label class="gwa-field gwa-col-6">
+          <span>Location</span>
+          <input type="text" name="location" value="<%= row.location %>" maxlength="120" placeholder="Mussafah, Abu Dhabi">
+        </label>
+        <label class="gwa-field gwa-col-3">
+          <span>Slug (auto if blank)</span>
+          <input type="text" name="slug" value="<%= row.slug %>" maxlength="60" pattern="[a-z0-9-]*">
+        </label>
+        <label class="gwa-field gwa-col-3">
+          <span>Sort order</span>
+          <input type="number" name="sort_order" value="<%= row.sort_order %>" min="0" max="9999">
+        </label>
+        <label class="gwa-field gwa-col-12">
+          <span>Summary *</span>
+          <textarea name="summary" rows="2" required maxlength="300" placeholder="One-line teaser shown on the opening card."><%= row.summary %></textarea>
+          <small class="gwa-hint">Shown on the card. Plain text; no HTML.</small>
+        </label>
+        <label class="gwa-field gwa-col-12">
+          <span>Full description</span>
+          <textarea name="description" rows="10" maxlength="8000" placeholder="Responsibilities, requirements, what we offer…"><%= row.description %></textarea>
+          <small class="gwa-hint">Shown in the expanded opening. Line breaks are preserved. Basic HTML (&lt;p&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;strong&gt;) is allowed.</small>
+        </label>
+        <label class="gwa-field gwa-col-3 gwa-field--inline">
+          <input type="checkbox" name="is_published" value="1" <%= row.is_published ? 'checked' : '' %>>
+          <span>Publish on site</span>
+        </label>
+      </div>
+      <div class="gwa-form__actions">
+        <% if (!isNew) { %>
+          <button type="submit" formaction="/admin/jobs/<%= row.id %>/delete"
+                  formmethod="post"
+                  onclick="return confirm('Delete &quot;<%= row.title %>&quot;? This cannot be undone.')"
+                  class="gwa-btn gwa-btn--danger">Delete</button>
+        <% } %>
+        <a href="/admin/jobs" class="gwa-btn gwa-btn--ghost">Cancel</a>
+        <button type="submit" class="gwa-btn gwa-btn--primary"><%= isNew ? 'Create' : 'Save' %></button>
+      </div>
+    </form>
+  </main>
+</div>
+</body></html>

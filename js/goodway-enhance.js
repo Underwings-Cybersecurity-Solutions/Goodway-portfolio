@@ -2175,3 +2175,122 @@
   updateStatic();
   if (parallaxItems.length) onScroll();
 })();
+
+/* ============================================================
+   Careers application form — multipart POST to /api/applications
+   with a graceful mailto: fallback. Kept separate from the JSON
+   lead handler because the CV file needs FormData, not JSON.
+   Also wires the "Apply for this role" buttons on job cards to
+   pre-fill the position + job id and scroll to the form.
+   ============================================================ */
+(function gwCareersForm() {
+  var doc = document;
+  var form = doc.querySelector('form[data-gw-application]');
+  if (!form) return;
+
+  var APPLICATIONS_API = window.GW_APPLICATIONS_API || '/api/applications';
+  var statusEl = form.querySelector('.gw-apply__status');
+  var submit = form.querySelector('.gw-apply__submit');
+  var positionInput = form.querySelector('input[name="job_title"]');
+  var jobIdInput = form.querySelector('input[name="job_id"]');
+  var MAX_BYTES = 5 * 1024 * 1024;
+  var OK_EXT = ['.pdf', '.doc', '.docx'];
+
+  function setStatus(msg, kind) {
+    if (!statusEl) return;
+    statusEl.textContent = msg || '';
+    statusEl.className = 'gw-apply__status' + (kind ? ' is-' + kind : '');
+  }
+
+  /* The form stays hidden until an Apply trigger is clicked. Triggers are the
+     per-job "Apply for this role" buttons (inside the published openings block)
+     and the general "Send us your CV" button ([data-open-apply]). Delegated so
+     it works no matter how many cards were rendered. */
+  var formSection = doc.getElementById('apply');
+  doc.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('.gw-job__apply, [data-open-apply]') : null;
+    if (!btn) return;
+    var title = btn.getAttribute('data-job-title') || '';
+    if (positionInput) positionInput.value = title;
+    if (jobIdInput) jobIdInput.value = btn.getAttribute('data-job-id') || '';
+    if (formSection) {
+      formSection.hidden = false;                       // reveal the form
+      formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    var nameField = form.querySelector('input[name="name"]');
+    if (nameField) setTimeout(function () { nameField.focus(); }, 350);
+    setStatus(title ? 'Applying for: ' + title : 'Send us your CV — fill in your details below.', 'ok');
+  });
+
+  function fallbackToMailto() {
+    /* Email can't carry the file — open a prefilled email and ask the
+       applicant to attach the CV manually so they still get through. */
+    var name = (form.querySelector('input[name="name"]') || {}).value || '';
+    var email = (form.querySelector('input[name="email"]') || {}).value || '';
+    var phone = (form.querySelector('input[name="phone"]') || {}).value || '';
+    var pos = (positionInput || {}).value || '';
+    var note = (form.querySelector('textarea[name="cover_note"]') || {}).value || '';
+    var body = 'Name: ' + name + '\nEmail: ' + email + '\nMobile: ' + phone +
+      '\nPosition: ' + pos + '\n\n' + note + '\n\n(Please attach your CV to this email.)';
+    var href = 'mailto:info@goodway.ae?subject=' +
+      encodeURIComponent('Job Application' + (pos ? ' — ' + pos : '')) +
+      '&body=' + encodeURIComponent(body);
+    window.location.href = href;
+    setStatus('Opening your email app — please attach your CV and send.', 'ok');
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    /* Honeypot — pretend success, do nothing. */
+    var honey = form.querySelector('input[name="website"]');
+    if (honey && honey.value.trim()) { setStatus('Thank you — your application has been received.', 'ok'); form.reset(); return; }
+
+    var name = (form.querySelector('input[name="name"]') || {}).value || '';
+    var email = (form.querySelector('input[name="email"]') || {}).value || '';
+    if (!name.trim() || !email.trim()) { setStatus('Please enter your name and email.', 'err'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setStatus('Please enter a valid email address.', 'err'); return; }
+
+    /* Client-side CV check (the server re-validates). */
+    var fileInput = form.querySelector('input[name="cv"]');
+    if (fileInput && fileInput.files && fileInput.files.length) {
+      var f = fileInput.files[0];
+      var lower = f.name.toLowerCase();
+      var extOk = OK_EXT.some(function (x) { return lower.slice(-x.length) === x; });
+      if (!extOk) { setStatus('CV must be a PDF, DOC or DOCX file.', 'err'); return; }
+      if (f.size > MAX_BYTES) { setStatus('CV is larger than 5 MB — please attach a smaller file.', 'err'); return; }
+    }
+
+    var fd = new FormData(form);
+    fd.delete('website');
+
+    var oldLabel = submit ? submit.textContent : '';
+    if (submit) { submit.disabled = true; submit.textContent = 'Sending…'; }
+    setStatus('Sending your application…', '');
+
+    var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var timeout = setTimeout(function () { if (controller) controller.abort(); }, 15000);
+
+    fetch(APPLICATIONS_API, { method: 'POST', body: fd, signal: controller ? controller.signal : undefined })
+      .then(function (r) { return r.ok ? r.json() : r.json().then(function (j) { throw new Error(j.error || 'Server error'); }); })
+      .then(function (out) {
+        clearTimeout(timeout);
+        if (!out || out.ok !== true) throw new Error('declined');
+        setStatus('Thank you — your application has been received. We’ll be in touch.', 'ok');
+        form.reset();
+        if (jobIdInput) jobIdInput.value = '';
+        if (submit) { submit.disabled = false; submit.textContent = oldLabel; }
+      })
+      .catch(function (err) {
+        clearTimeout(timeout);
+        if (submit) { submit.disabled = false; submit.textContent = oldLabel; }
+        /* Validation errors from the server should be shown, not mailto-bounced. */
+        if (err && /pdf|doc|email|required|larger|minute/i.test(err.message || '')) {
+          setStatus(err.message, 'err');
+        } else {
+          console.warn('[gw] application POST failed, falling back to mailto:', err && err.message);
+          fallbackToMailto();
+        }
+      });
+  });
+})();

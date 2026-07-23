@@ -1,0 +1,53 @@
+<%- include('../partials/head', { title: 'Applications' }) %>
+<div class="gwa-shell">
+  <%- include('../partials/nav') %>
+  <main class="gwa-main">
+    <header class="gwa-pagehead">
+      <div>
+        <h1>Applications</h1>
+        <p class="gwa-sub">Job applications submitted through careers.html.</p>
+      </div>
+      <a href="/admin/applications/export.csv" class="gwa-btn gwa-btn--ghost">Export CSV</a>
+    </header>
+    <%- include('../partials/flash') %>
+
+    <form method="get" class="gwa-filter">
+      <div class="gwa-filter__tabs">
+        <a class="gwa-tab <%= status === 'all' ? 'is-active' : '' %>" href="?status=all<%= q ? '&q=' + encodeURIComponent(q) : '' %>">All</a>
+        <% statuses.forEach(function (s) { %>
+          <a class="gwa-tab <%= status === s ? 'is-active' : '' %>" href="?status=<%= s %><%= q ? '&q=' + encodeURIComponent(q) : '' %>">
+            <%= s %>
+            <% if (counts[s]) { %><span class="gwa-tab__n"><%= counts[s] %></span><% } %>
+          </a>
+        <% }); %>
+      </div>
+      <input type="search" name="q" value="<%= q %>" placeholder="Search name, email, position…" class="gwa-filter__search">
+      <input type="hidden" name="status" value="<%= status %>">
+      <button class="gwa-btn gwa-btn--ghost">Search</button>
+    </form>
+
+    <section class="gwa-card">
+      <% if (rows.length === 0) { %>
+        <p class="gwa-muted">No applications for this filter.</p>
+      <% } else { %>
+        <table class="gwa-table gwa-table--sticky">
+          <thead><tr><th>When</th><th>Applicant</th><th>Position</th><th>Email</th><th>Phone</th><th>CV</th><th>Status</th></tr></thead>
+          <tbody>
+          <% rows.forEach(function (r) { %>
+            <tr>
+              <td class="gwa-muted"><%= r.received_at %></td>
+              <td><a href="/admin/applications/<%= r.id %>"><%= r.name %></a></td>
+              <td><%= r.job_title || '—' %></td>
+              <td><a href="mailto:<%= r.email %>"><%= r.email %></a></td>
+              <td><%= r.phone || '—' %></td>
+              <td><% if (r.cv_stored_name) { %><a href="/admin/applications/<%= r.id %>/cv" target="_blank" rel="noopener">View</a><% } else { %><span class="gwa-muted">—</span><% } %></td>
+              <td><span class="gwa-pill gwa-pill--<%= r.status %>"><%= r.status %></span></td>
+            </tr>
+          <% }); %>
+          </tbody>
+        </table>
+      <% } %>
+    </section>
+  </main>
+</div>
+</body></html>
