@@ -100,6 +100,26 @@ db.exec(`
     updated_at      TEXT    NOT NULL DEFAULT (datetime('now'))
   );
 
+  /* Blog / Journal — posts rendered into journal.html + a generated page each */
+  CREATE TABLE IF NOT EXISTS posts (
+    id               INTEGER PRIMARY KEY AUTOINCREMENT,
+    slug             TEXT    NOT NULL UNIQUE,
+    title            TEXT    NOT NULL,
+    category         TEXT    NOT NULL DEFAULT '',
+    published_date   TEXT    NOT NULL DEFAULT (date('now')),
+    excerpt          TEXT    NOT NULL DEFAULT '',
+    lede             TEXT    NOT NULL DEFAULT '',
+    body             TEXT    NOT NULL DEFAULT '',
+    image_path       TEXT    DEFAULT NULL,
+    meta_description TEXT    NOT NULL DEFAULT '',
+    cta_href         TEXT    NOT NULL DEFAULT '',
+    cta_label        TEXT    NOT NULL DEFAULT '',
+    sort_order       INTEGER NOT NULL DEFAULT 0,
+    is_published     INTEGER NOT NULL DEFAULT 1,
+    created_at       TEXT    NOT NULL DEFAULT (datetime('now')),
+    updated_at       TEXT    NOT NULL DEFAULT (datetime('now'))
+  );
+
   /* Careers — inbound job applications (from POST /api/applications) */
   CREATE TABLE IF NOT EXISTS applications (
     id                INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -124,6 +144,8 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_quotes_received     ON quotes(received_at DESC);
   CREATE INDEX IF NOT EXISTS idx_quotes_status       ON quotes(status);
   CREATE INDEX IF NOT EXISTS idx_jobs_sort           ON jobs(sort_order);
+  CREATE INDEX IF NOT EXISTS idx_posts_date          ON posts(published_date DESC);
+  CREATE INDEX IF NOT EXISTS idx_posts_sort          ON posts(sort_order);
   CREATE INDEX IF NOT EXISTS idx_applications_recv    ON applications(received_at DESC);
   CREATE INDEX IF NOT EXISTS idx_applications_status  ON applications(status);
   CREATE INDEX IF NOT EXISTS idx_applications_job     ON applications(job_id);
@@ -142,6 +164,7 @@ function bumpUpdatedAt(table) {
 bumpUpdatedAt('principals');
 bumpUpdatedAt('sectors');
 bumpUpdatedAt('jobs');
+bumpUpdatedAt('posts');
 
 /** Lightweight migration: add a column to an existing table if it's missing.
  *  Keeps older databases in sync without a migration framework. */

@@ -227,6 +227,7 @@ app.use('/admin/sectors',      auth.requireLogin, require('./routes/sectors'));
 app.use('/admin/quotes',       auth.requireLogin, require('./routes/quotes'));
 app.use('/admin/jobs',         auth.requireLogin, require('./routes/jobs'));
 app.use('/admin/applications', auth.requireLogin, require('./routes/applications'));
+app.use('/admin/posts',        auth.requireLogin, require('./routes/posts'));
 app.use('/admin/publish',      auth.requireLogin, require('./routes/publish'));
 
 /* Root of admin — dashboard summary */

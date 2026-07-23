@@ -281,6 +281,21 @@ code, .gwa-mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospa
 /* Sidebar Change-password link visual treatment */
 .gwa-sidebar__foot .gwa-link.is-active { color: var(--gold); }
 
+/* ---------- WYSIWYG editor ---------- */
+.gwa-editor { border: 1px solid var(--border-strong); border-radius: 8px; overflow: hidden; background: #fff; }
+.gwa-editor__bar { display: flex; flex-wrap: wrap; gap: 3px; padding: 7px; background: var(--linen); border-bottom: 1px solid var(--border); }
+.gwa-editor__btn { border: 1px solid var(--border-strong); background: #fff; border-radius: 6px; padding: 5px 10px; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--navy); }
+.gwa-editor__btn:hover { border-color: var(--gold); background: var(--ivory); }
+.gwa-editor__area { min-height: 300px; max-height: 560px; overflow-y: auto; padding: 16px 18px; font-size: 14px; line-height: 1.65; outline: none; color: var(--text); }
+.gwa-editor__area:focus { box-shadow: inset 0 0 0 2px rgba(201,169,97,0.22); }
+.gwa-editor__area h2 { font-size: 21px; font-weight: 700; margin: 0.9em 0 0.35em; color: var(--navy); }
+.gwa-editor__area h3 { font-size: 17px; font-weight: 700; margin: 0.8em 0 0.35em; color: var(--navy); }
+.gwa-editor__area p { margin: 0 0 0.75em; }
+.gwa-editor__area ul, .gwa-editor__area ol { margin: 0 0 0.75em 1.4em; }
+.gwa-editor__area li { margin: 0.2em 0; }
+.gwa-editor__area blockquote { border-left: 3px solid var(--gold); margin: 0 0 0.75em; padding: 0.2em 0 0.2em 1em; color: var(--muted); font-style: italic; }
+.gwa-editor__area a { color: var(--navy-3); }
+
 /* ============================================================
    UI/UX ENHANCEMENT LAYER
    Brand fonts (matches goodway.ae), richer cards, refined

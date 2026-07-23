@@ -1,0 +1,94 @@
+<%
+  var isNew = !row.id;
+  var action = isNew ? '/admin/posts/new' : '/admin/posts/' + row.id + '/edit';
+%>
+<%- include('../partials/head', { title: (isNew ? 'New' : 'Edit') + ' post' }) %>
+<div class="gwa-shell">
+  <%- include('../partials/nav') %>
+  <main class="gwa-main">
+    <header class="gwa-pagehead">
+      <div>
+        <a href="/admin/posts" class="gwa-crumb">← Journal</a>
+        <h1><%= isNew ? 'New post' : row.title %></h1>
+      </div>
+    </header>
+    <%- include('../partials/flash') %>
+    <form method="post" action="<%= action %>" enctype="multipart/form-data" class="gwa-form gwa-card">
+      <input type="hidden" name="_csrf" value="<%= csrf %>">
+      <div class="gwa-form__grid">
+        <label class="gwa-field gwa-col-6">
+          <span>Title *</span>
+          <input type="text" name="title" value="<%= row.title %>" required maxlength="160">
+        </label>
+        <label class="gwa-field gwa-col-3">
+          <span>Category</span>
+          <input type="text" name="category" value="<%= row.category %>" maxlength="60" placeholder="Compliance">
+        </label>
+        <label class="gwa-field gwa-col-3">
+          <span>Publish date</span>
+          <input type="date" name="published_date" value="<%= row.published_date %>">
+        </label>
+        <label class="gwa-field gwa-col-8">
+          <span>Excerpt *</span>
+          <textarea name="excerpt" rows="2" required maxlength="400" placeholder="One-paragraph teaser shown on the journal list."><%= row.excerpt %></textarea>
+        </label>
+        <label class="gwa-field gwa-col-4">
+          <span>Slug (auto if blank)</span>
+          <input type="text" name="slug" value="<%= row.slug %>" maxlength="70" pattern="[a-z0-9-]*">
+        </label>
+        <label class="gwa-field gwa-col-12">
+          <span>Lede</span>
+          <textarea name="lede" rows="2" maxlength="500" placeholder="Intro paragraph under the article title (defaults to the excerpt if blank)."><%= row.lede %></textarea>
+        </label>
+        <div class="gwa-field gwa-col-12">
+          <span>Article body *</span>
+          <textarea name="body" data-wysiwyg required><%= row.body %></textarea>
+          <small class="gwa-hint">Use the toolbar for headings, lists, bold, quotes and links.</small>
+        </div>
+        <label class="gwa-field gwa-col-6">
+          <span>Cover image (optional)</span>
+          <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif">
+          <small class="gwa-hint">PNG / JPG / WEBP / GIF, max 5&nbsp;MB. Shown atop the article.</small>
+        </label>
+        <% if (row.image_path) { %>
+        <div class="gwa-field gwa-col-6">
+          <span>Current cover</span>
+          <img src="/uploads/<%= row.image_path.split('/').pop() %>" alt="Current cover" style="max-height:64px;width:auto;border:1px solid var(--border);border-radius:8px;padding:6px;background:#fff">
+          <label class="gwa-field--inline" style="padding-top:8px"><input type="checkbox" name="remove_image" value="1"><span>Remove cover on save</span></label>
+        </div>
+        <% } %>
+        <label class="gwa-field gwa-col-6">
+          <span>CTA button link (optional)</span>
+          <input type="text" name="cta_href" value="<%= row.cta_href %>" maxlength="200" placeholder="request-a-quote.html?sector=construction">
+        </label>
+        <label class="gwa-field gwa-col-6">
+          <span>CTA button label (optional)</span>
+          <input type="text" name="cta_label" value="<%= row.cta_label %>" maxlength="80" placeholder="Request fire-door supply">
+        </label>
+        <label class="gwa-field gwa-col-12">
+          <span>Meta description (SEO)</span>
+          <textarea name="meta_description" rows="2" maxlength="300" placeholder="Search-engine description (defaults to the excerpt if blank)."><%= row.meta_description %></textarea>
+        </label>
+        <label class="gwa-field gwa-col-3">
+          <span>Sort order</span>
+          <input type="number" name="sort_order" value="<%= row.sort_order %>" min="0" max="9999">
+        </label>
+        <label class="gwa-field gwa-col-3 gwa-field--inline">
+          <input type="checkbox" name="is_published" value="1" <%= row.is_published ? 'checked' : '' %>>
+          <span>Publish on site</span>
+        </label>
+      </div>
+      <div class="gwa-form__actions">
+        <% if (!isNew) { %>
+          <button type="submit" formaction="/admin/posts/<%= row.id %>/delete" formmethod="post"
+                  onclick="return confirm('Delete &quot;<%= row.title %>&quot;? This removes the article page too.')"
+                  class="gwa-btn gwa-btn--danger">Delete</button>
+        <% } %>
+        <a href="/admin/posts" class="gwa-btn gwa-btn--ghost">Cancel</a>
+        <button type="submit" class="gwa-btn gwa-btn--primary"><%= isNew ? 'Create' : 'Save' %></button>
+      </div>
+    </form>
+  </main>
+</div>
+<script src="/admin/static/admin-editor.js" defer></script>
+</body></html>

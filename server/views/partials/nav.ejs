@@ -16,6 +16,7 @@
       Applications
       <% if (typeof newApplications !== 'undefined' && newApplications > 0) { %><span class="gwa-badge"><%= newApplications %></span><% } %>
     </a>
+    <a href="/admin/posts"      class="gwa-nav__link <%= active === 'posts'      ? 'is-active' : '' %>">Journal</a>
     <a href="/admin/publish"    class="gwa-nav__link <%= active === 'publish'    ? 'is-active' : '' %>">Publish</a>
   </nav>
   <div class="gwa-sidebar__foot">

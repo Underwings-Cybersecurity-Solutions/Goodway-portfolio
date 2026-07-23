@@ -1,0 +1,48 @@
+<%- include('../partials/head', { title: 'Journal' }) %>
+<div class="gwa-shell">
+  <%- include('../partials/nav') %>
+  <main class="gwa-main">
+    <header class="gwa-pagehead">
+      <div>
+        <h1>Journal</h1>
+        <p class="gwa-sub">Blog posts shown on journal.html. Publishing regenerates the list + each article page.</p>
+      </div>
+      <div class="gwa-form--row">
+        <form method="post" action="/admin/posts/publish" class="gwa-inline-form">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <button type="submit" class="gwa-btn gwa-btn--ghost">Publish journal</button>
+        </form>
+        <a href="/admin/posts/new" class="gwa-btn gwa-btn--primary">+ New post</a>
+      </div>
+    </header>
+    <%- include('../partials/flash') %>
+    <section class="gwa-card">
+      <% if (rows.length === 0) { %>
+        <p class="gwa-muted">No posts yet. <a href="/admin/posts/new">Write the first one</a>. Your existing hand-written journal entries stay untouched.</p>
+      <% } else { %>
+        <table class="gwa-table gwa-table--sticky">
+          <thead>
+            <tr><th>#</th><th>Title</th><th>Category</th><th>Date</th><th>Order</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody>
+          <% rows.forEach(function (r) { %>
+            <tr>
+              <td class="gwa-muted"><%= r.id %></td>
+              <td><a href="/admin/posts/<%= r.id %>/edit"><%= r.title %></a></td>
+              <td><%= r.category || '—' %></td>
+              <td class="gwa-muted"><%= r.published_date %></td>
+              <td><%= r.sort_order %></td>
+              <td>
+                <% if (r.is_published) { %><span class="gwa-pill gwa-pill--live">live</span>
+                <% } else { %><span class="gwa-pill gwa-pill--draft">draft</span><% } %>
+              </td>
+              <td class="gwa-row-actions"><a href="/admin/posts/<%= r.id %>/edit" class="gwa-link">Edit</a></td>
+            </tr>
+          <% }); %>
+          </tbody>
+        </table>
+      <% } %>
+    </section>
+  </main>
+</div>
+</body></html>
