@@ -79,11 +79,49 @@ db.exec(`
     detail          TEXT    DEFAULT NULL
   );
 
+  /* Careers — job openings shown on careers.html between the GW-CAREERS markers */
+  CREATE TABLE IF NOT EXISTS jobs (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    slug            TEXT    NOT NULL UNIQUE,
+    title           TEXT    NOT NULL,
+    department      TEXT    NOT NULL DEFAULT '',
+    location        TEXT    NOT NULL DEFAULT '',
+    employment_type TEXT    NOT NULL DEFAULT 'full-time',
+    summary         TEXT    NOT NULL DEFAULT '',
+    description     TEXT    NOT NULL DEFAULT '',
+    sort_order      INTEGER NOT NULL DEFAULT 0,
+    is_published    INTEGER NOT NULL DEFAULT 1,
+    created_at      TEXT    NOT NULL DEFAULT (datetime('now')),
+    updated_at      TEXT    NOT NULL DEFAULT (datetime('now'))
+  );
+
+  /* Careers — inbound job applications (from POST /api/applications) */
+  CREATE TABLE IF NOT EXISTS applications (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    received_at       TEXT    NOT NULL DEFAULT (datetime('now')),
+    job_id            INTEGER DEFAULT NULL REFERENCES jobs(id) ON DELETE SET NULL,
+    job_title         TEXT    NOT NULL DEFAULT '',
+    name              TEXT    NOT NULL,
+    email             TEXT    NOT NULL,
+    phone             TEXT    NOT NULL DEFAULT '',
+    cover_note        TEXT    NOT NULL DEFAULT '',
+    cv_original_name  TEXT    DEFAULT NULL,
+    cv_stored_name    TEXT    DEFAULT NULL,
+    source            TEXT    NOT NULL DEFAULT 'web',
+    ip                TEXT    DEFAULT NULL,
+    user_agent        TEXT    DEFAULT NULL,
+    status            TEXT    NOT NULL DEFAULT 'new'
+  );
+
   CREATE INDEX IF NOT EXISTS idx_principals_category ON principals(category);
   CREATE INDEX IF NOT EXISTS idx_principals_sort     ON principals(sort_order);
   CREATE INDEX IF NOT EXISTS idx_sectors_sort        ON sectors(sort_order);
   CREATE INDEX IF NOT EXISTS idx_quotes_received     ON quotes(received_at DESC);
   CREATE INDEX IF NOT EXISTS idx_quotes_status       ON quotes(status);
+  CREATE INDEX IF NOT EXISTS idx_jobs_sort           ON jobs(sort_order);
+  CREATE INDEX IF NOT EXISTS idx_applications_recv    ON applications(received_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_applications_status  ON applications(status);
+  CREATE INDEX IF NOT EXISTS idx_applications_job     ON applications(job_id);
 `);
 
 /** Stamp updated_at on every UPDATE against content tables. */
@@ -98,6 +136,7 @@ function bumpUpdatedAt(table) {
 }
 bumpUpdatedAt('principals');
 bumpUpdatedAt('sectors');
+bumpUpdatedAt('jobs');
 
 function logAudit(actor, action, entity, entityId, detail) {
   db.prepare(

@@ -20,6 +20,14 @@
         <div class="gwa-stat__n"><%= newLeads %></div>
         <div class="gwa-stat__label">New leads</div>
       </a>
+      <a href="/admin/jobs" class="gwa-stat">
+        <div class="gwa-stat__n"><%= typeof openJobs !== 'undefined' ? openJobs : 0 %></div>
+        <div class="gwa-stat__label">Open jobs</div>
+      </a>
+      <a href="/admin/applications?status=new" class="gwa-stat gwa-stat--accent">
+        <div class="gwa-stat__n"><%= typeof newApplications !== 'undefined' ? newApplications : 0 %></div>
+        <div class="gwa-stat__label">New applications</div>
+      </a>
       <a href="/admin/publish" class="gwa-stat">
         <div class="gwa-stat__n">→</div>
         <div class="gwa-stat__label">Publish changes</div>

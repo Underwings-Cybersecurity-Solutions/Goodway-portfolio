@@ -1,0 +1,48 @@
+<%- include('../partials/head', { title: 'Careers' }) %>
+<div class="gwa-shell">
+  <%- include('../partials/nav') %>
+  <main class="gwa-main">
+    <header class="gwa-pagehead">
+      <div>
+        <h1>Careers</h1>
+        <p class="gwa-sub">Job openings shown on careers.html. Publish to update the live page.</p>
+      </div>
+      <a href="/admin/jobs/new" class="gwa-btn gwa-btn--primary">+ New opening</a>
+    </header>
+    <%- include('../partials/flash') %>
+    <section class="gwa-card">
+      <% if (rows.length === 0) { %>
+        <p class="gwa-muted">No openings yet. <a href="/admin/jobs/new">Post the first one</a>. The careers page will show a "no current openings" message until then.</p>
+      <% } else { %>
+        <table class="gwa-table gwa-table--sticky">
+          <thead>
+            <tr>
+              <th>#</th><th>Title</th><th>Department</th><th>Location</th>
+              <th>Type</th><th>Order</th><th>Status</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+          <% rows.forEach(function (r) { %>
+            <tr>
+              <td class="gwa-muted"><%= r.id %></td>
+              <td><a href="/admin/jobs/<%= r.id %>/edit"><%= r.title %></a></td>
+              <td><%= r.department || '—' %></td>
+              <td><%= r.location || '—' %></td>
+              <td><%= r.employment_type.replace('-', ' ') %></td>
+              <td><%= r.sort_order %></td>
+              <td>
+                <% if (r.is_published) { %><span class="gwa-pill gwa-pill--live">live</span>
+                <% } else { %><span class="gwa-pill gwa-pill--draft">draft</span><% } %>
+              </td>
+              <td class="gwa-row-actions">
+                <a href="/admin/jobs/<%= r.id %>/edit" class="gwa-link">Edit</a>
+              </td>
+            </tr>
+          <% }); %>
+          </tbody>
+        </table>
+      <% } %>
+    </section>
+  </main>
+</div>
+</body></html>
