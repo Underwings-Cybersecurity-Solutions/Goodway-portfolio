@@ -15,7 +15,7 @@
       </div>
     </header>
     <%- include('../partials/flash') %>
-    <form method="post" action="<%= action %>" class="gwa-form gwa-card">
+    <form method="post" action="<%= action %>" enctype="multipart/form-data" class="gwa-form gwa-card">
       <input type="hidden" name="_csrf" value="<%= csrf %>">
       <div class="gwa-form__grid">
         <label class="gwa-field gwa-col-6">
@@ -56,6 +56,18 @@
           <textarea name="chips" rows="2" placeholder="DC Power, UPS, Ex Lighting"><%= chips.join(', ') %></textarea>
           <small class="gwa-hint">Comma or newline separated. Max 8 chips.</small>
         </label>
+        <label class="gwa-field gwa-col-6">
+          <span>Logo image</span>
+          <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif">
+          <small class="gwa-hint">PNG / JPG / WEBP / GIF, max 5&nbsp;MB. Shown on the principals card.</small>
+        </label>
+        <% if (row.image_path) { %>
+        <div class="gwa-field gwa-col-6">
+          <span>Current logo</span>
+          <img src="/uploads/<%= row.image_path.split('/').pop() %>" alt="Current logo" style="max-height:64px;width:auto;border:1px solid var(--border);border-radius:8px;padding:6px;background:#fff">
+          <label class="gwa-field--inline" style="padding-top:8px"><input type="checkbox" name="remove_image" value="1"><span>Remove logo on save</span></label>
+        </div>
+        <% } %>
         <label class="gwa-field gwa-col-3">
           <span>Sort order</span>
           <input type="number" name="sort_order" value="<%= row.sort_order %>" min="0" max="9999">

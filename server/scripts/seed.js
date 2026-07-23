@@ -45,6 +45,8 @@ function parsePrincipalsHtml() {
     const chipsBlock = (inner.match(/<div class="gw-brand-card__chips">([\s\S]*?)<\/div>/) || [])[1] || '';
     const chips = [...chipsBlock.matchAll(/<span class="gw-chip">([^<]+)<\/span>/g)].map(x => x[1].trim());
     const href    = (inner.match(/<a class="gw-brand-card__cta" href="([^"]+)"/) || [])[1] || '';
+    const ctaLabel = (inner.match(/<a class="gw-brand-card__cta"[^>]*>([\s\S]*?)<\/a>/) || [])[1] || 'See products in division';
+    const logoSrc = (inner.match(/<img class="gw-brand-card__logo" src="([^"]+)"/) || [])[1] || null;
     cards.push({
       category,
       category_label: decodePlain(group).trim(),
@@ -54,6 +56,8 @@ function parsePrincipalsHtml() {
       description: desc.trim(),              /* HTML — keep as-is */
       chips: chips.map(decodePlain),
       division_href: href,
+      cta_label: decodePlain(ctaLabel).trim(),
+      image_path: logoSrc,
       sort_order: order
     });
     order += 10;
@@ -70,6 +74,9 @@ function parseIndustriesHtml() {
   while ((m = re.exec(html)) !== null) {
     const [, slug, tier, inner] = m;
     const iconSvg  = (inner.match(/<div class="gw-industry__icon"[^>]*>([\s\S]*?)<\/div>/) || [])[1] || '';
+    const imgMatch = inner.match(/<div class="gw-industry__image"><img src="([^"]+)"[^>]*alt="([^"]*)"/) || [];
+    const imagePath = imgMatch[1] || null;
+    const imageAlt  = imgMatch[2] || null;
     const tierLabel = (inner.match(/<span class="gw-industry__tier">([^<]+)<\/span>/) || [])[1] || '';
     const titleRaw = (inner.match(/<h3 class="gw-industry__title">([\s\S]*?)<\/h3>/) || [])[1] || '';
     const subMatch = titleRaw.match(/<small[^>]*>\(?([^<]+?)\)?<\/small>/);
@@ -92,6 +99,8 @@ function parseIndustriesHtml() {
       principals_list: principalsList.trim(),    /* HTML-capable — keep raw */
       cta_label: decodePlain(ctaLabel).trim(),
       icon_svg: iconSvg.trim(),
+      image_path: imagePath,
+      image_alt: imageAlt,
       sort_order: order
     });
     order += 10;
@@ -113,9 +122,9 @@ const tx = db.transaction(function () {
   db.exec('DELETE FROM principals; DELETE FROM sectors;');
   const insP = db.prepare(`
     INSERT INTO principals (slug, name, country, country_lang, category, category_label, description,
-                             chips_json, division_href, sort_order, is_published)
+                             chips_json, division_href, cta_label, image_path, sort_order, is_published)
     VALUES (@slug, @name, @country, @country_lang, @category, @category_label, @description,
-            @chips_json, @division_href, @sort_order, 1)
+            @chips_json, @division_href, @cta_label, @image_path, @sort_order, 1)
   `);
   principals.forEach(function (p) {
     insP.run({
@@ -128,15 +137,17 @@ const tx = db.transaction(function () {
       description: p.description,
       chips_json: JSON.stringify(p.chips),
       division_href: p.division_href,
+      cta_label: p.cta_label,
+      image_path: p.image_path,
       sort_order: p.sort_order
     });
   });
 
   const insS = db.prepare(`
     INSERT INTO sectors (slug, title, subtitle, tier, tier_label, lede, products, principals_list,
-                         cta_label, icon_svg, sort_order, is_published)
+                         cta_label, icon_svg, image_path, image_alt, sort_order, is_published)
     VALUES (@slug, @title, @subtitle, @tier, @tier_label, @lede, @products, @principals_list,
-            @cta_label, @icon_svg, @sort_order, 1)
+            @cta_label, @icon_svg, @image_path, @image_alt, @sort_order, 1)
   `);
   sectors.forEach(function (s) { insS.run(s); });
 });

@@ -71,3 +71,7 @@ server/data/leads-inbox.log
 *.log
 coverage/
 /tmp/
+
+# Admin-uploaded public images (principal logos, job images) — live on the
+# server disk, served by the static host; not tracked in git.
+assets/uploads/

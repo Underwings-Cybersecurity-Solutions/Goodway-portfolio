@@ -7,7 +7,13 @@
         <h1>Sectors</h1>
         <p class="gwa-sub">Industries Goodway serves — displayed on the industries page.</p>
       </div>
-      <a href="/admin/sectors/new" class="gwa-btn gwa-btn--primary">+ New sector</a>
+      <div class="gwa-form--row">
+        <form method="post" action="/admin/sectors/publish" class="gwa-inline-form">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <button type="submit" class="gwa-btn gwa-btn--ghost">Publish industries page</button>
+        </form>
+        <a href="/admin/sectors/new" class="gwa-btn gwa-btn--primary">+ New sector</a>
+      </div>
     </header>
     <%- include('../partials/flash') %>
     <section class="gwa-card">

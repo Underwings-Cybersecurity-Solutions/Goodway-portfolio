@@ -1,8 +1,23 @@
 const express = require('express');
 const { db, logAudit } = require('../db');
 const { ensureCsrf, verifyCsrf } = require('../middleware/auth');
+const { writeSectors } = require('../scripts/build-pages');
 
 const router = express.Router();
+
+/* Scoped publish — regenerates ONLY industries.html between its markers. */
+router.post('/publish', ensureCsrf, verifyCsrf, function (req, res) {
+  try {
+    writeSectors();
+    const n = db.prepare('SELECT COUNT(*) AS n FROM sectors WHERE is_published = 1').get().n;
+    logAudit(req.session.user.username, 'publish', 'sectors', null, 'count=' + n);
+    req.session.flash = [{ kind: 'success', msg: 'Industries page published — ' + n + ' sectors live. Nothing else was changed.' }];
+  } catch (e) {
+    console.error(e);
+    req.session.flash = [{ kind: 'error', msg: 'Publish failed: ' + e.message }];
+  }
+  res.redirect('/admin/sectors');
+});
 
 const TIERS = [
   { key: 'primary',  label: 'Primary sector' },

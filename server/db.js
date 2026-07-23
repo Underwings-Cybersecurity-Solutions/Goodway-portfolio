@@ -27,6 +27,8 @@ db.exec(`
     description     TEXT    NOT NULL DEFAULT '',
     chips_json      TEXT    NOT NULL DEFAULT '[]',
     division_href   TEXT    NOT NULL DEFAULT '',
+    cta_label       TEXT    NOT NULL DEFAULT 'See products in division',
+    image_path      TEXT    DEFAULT NULL,
     sort_order      INTEGER NOT NULL DEFAULT 0,
     is_published    INTEGER NOT NULL DEFAULT 1,
     created_at      TEXT    NOT NULL DEFAULT (datetime('now')),
@@ -45,6 +47,8 @@ db.exec(`
     principals_list TEXT    NOT NULL DEFAULT '',
     cta_label       TEXT    NOT NULL DEFAULT 'Request supply',
     icon_svg        TEXT    NOT NULL DEFAULT '',
+    image_path      TEXT    DEFAULT NULL,
+    image_alt       TEXT    DEFAULT NULL,
     sort_order      INTEGER NOT NULL DEFAULT 0,
     is_published    INTEGER NOT NULL DEFAULT 1,
     created_at      TEXT    NOT NULL DEFAULT (datetime('now')),
@@ -89,6 +93,7 @@ db.exec(`
     employment_type TEXT    NOT NULL DEFAULT 'full-time',
     summary         TEXT    NOT NULL DEFAULT '',
     description     TEXT    NOT NULL DEFAULT '',
+    image_path      TEXT    DEFAULT NULL,
     sort_order      INTEGER NOT NULL DEFAULT 0,
     is_published    INTEGER NOT NULL DEFAULT 1,
     created_at      TEXT    NOT NULL DEFAULT (datetime('now')),
@@ -137,6 +142,18 @@ function bumpUpdatedAt(table) {
 bumpUpdatedAt('principals');
 bumpUpdatedAt('sectors');
 bumpUpdatedAt('jobs');
+
+/** Lightweight migration: add a column to an existing table if it's missing.
+ *  Keeps older databases in sync without a migration framework. */
+function ensureColumn(table, column, ddl) {
+  const has = db.prepare('PRAGMA table_info(' + table + ')').all().some(c => c.name === column);
+  if (!has) db.exec('ALTER TABLE ' + table + ' ADD COLUMN ' + column + ' ' + ddl);
+}
+ensureColumn('principals', 'cta_label', "TEXT NOT NULL DEFAULT 'See products in division'");
+ensureColumn('principals', 'image_path', 'TEXT DEFAULT NULL');
+ensureColumn('jobs', 'image_path', 'TEXT DEFAULT NULL');
+ensureColumn('sectors', 'image_path', 'TEXT DEFAULT NULL');
+ensureColumn('sectors', 'image_alt', 'TEXT DEFAULT NULL');
 
 function logAudit(actor, action, entity, entityId, detail) {
   db.prepare(

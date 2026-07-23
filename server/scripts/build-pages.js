@@ -37,16 +37,19 @@ function renderPrincipalsGrid() {
     return [
       '        <article class="gw-brand-card" data-category="' + escAttr(r.category) +
         '" data-group="' + escAttr(r.category_label) + '">',
+      (r.image_path
+        ? '          <img class="gw-brand-card__logo" src="' + escAttr(r.image_path) + '" alt="' + escAttr(r.name) + ' logo" loading="lazy" style="max-height:46px;width:auto;margin-bottom:12px;display:block">'
+        : ''),
       '          <div class="gw-brand-card__top">',
       '            <div class="gw-brand-card__name">' + esc(r.name) + '</div>',
       '            <span class="gw-brand-card__country"' + langAttr + '>' + esc(r.country) + '</span>',
       '          </div>',
       '          <p class="gw-brand-card__desc">' + r.description + '</p>',
       '          <div class="gw-brand-card__chips">' + chipMarkup + '</div>',
-      '          <a class="gw-brand-card__cta" href="' + escAttr(r.division_href) + '">See products in division</a>',
+      '          <a class="gw-brand-card__cta" href="' + escAttr(r.division_href) + '">' + esc(r.cta_label || 'See products in division') + '</a>',
       '        </article>'
-    ].join('\n');
-  }).join('\n\n') + '\n      ';
+    ].filter(Boolean).join('\n');
+  }).join('\n\n') + '\n\n      ';
 }
 
 /* ---------- Sector grid ---------- */
@@ -58,7 +61,7 @@ function renderSectorsGrid() {
   if (!rows.length) return '\n      <!-- no sectors published -->\n    ';
   return '\n' + rows.map(function (s) {
     const subtitleMarkup = s.subtitle
-      ? ' <small style="font-weight:500;color:var(--gw-muted);font-size:0.75em">(' + esc(s.subtitle) + ')</small>'
+      ? ' <small class="gw-industry__title-sub">(' + esc(s.subtitle) + ')</small>'
       : '';
     const productsDd = s.products
       ? '          <div><dt>Products supplied</dt><dd>' + s.products + '</dd></div>\n' : '';
@@ -67,10 +70,14 @@ function renderSectorsGrid() {
     const metaBlock = (productsDd + principalsDd)
       ? '        <dl class="gw-industry__meta">\n' + productsDd + principalsDd + '        </dl>\n'
       : '';
+    /* Prefer an uploaded/hero image; fall back to the legacy inline icon SVG. */
+    const media = s.image_path
+      ? '        <div class="gw-industry__image"><img src="' + escAttr(s.image_path) + '" alt="' + escAttr(s.image_alt || (s.title + ' sector')) + '" loading="lazy" width="480" height="320"></div>'
+      : '        <div class="gw-industry__icon" aria-hidden="true">' + s.icon_svg + '</div>';
     return [
       '      <a href="request-a-quote.html?sector=' + escAttr(s.slug) + '" class="gw-industry" data-tier="' + escAttr(s.tier) +
         '" aria-label="' + escAttr(s.title + ' sector — request supply') + '">',
-      '        <div class="gw-industry__icon" aria-hidden="true">' + s.icon_svg + '</div>',
+      media,
       '        <span class="gw-industry__tier">' + esc(s.tier_label) + '</span>',
       '        <h3 class="gw-industry__title">' + s.title.replace(/&/g, '&amp;') + subtitleMarkup + '</h3>',
       '        <p class="gw-industry__lede">' + s.lede + '</p>',
@@ -105,6 +112,9 @@ function renderCareersList() {
       : '';
     return [
       '        <article class="gw-job" id="job-' + escAttr(j.slug) + '">',
+      (j.image_path
+        ? '          <img class="gw-job__img" src="' + escAttr(j.image_path) + '" alt="' + escAttr(j.title) + '" loading="lazy">'
+        : ''),
       '          <div class="gw-job__head">',
       '            <h3 class="gw-job__title">' + esc(j.title) + '</h3>',
       '            <span class="gw-job__type">' + typeLabel + '</span>',

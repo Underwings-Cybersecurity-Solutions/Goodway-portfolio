@@ -13,7 +13,7 @@
       </div>
     </header>
     <%- include('../partials/flash') %>
-    <form method="post" action="<%= action %>" class="gwa-form gwa-card">
+    <form method="post" action="<%= action %>" enctype="multipart/form-data" class="gwa-form gwa-card">
       <input type="hidden" name="_csrf" value="<%= csrf %>">
       <div class="gwa-form__grid">
         <label class="gwa-field gwa-col-6">
@@ -54,6 +54,18 @@
           <textarea name="description" rows="10" maxlength="8000" placeholder="Responsibilities, requirements, what we offer…"><%= row.description %></textarea>
           <small class="gwa-hint">Shown in the expanded opening. Line breaks are preserved. Basic HTML (&lt;p&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;strong&gt;) is allowed.</small>
         </label>
+        <label class="gwa-field gwa-col-6">
+          <span>Image (optional)</span>
+          <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif">
+          <small class="gwa-hint">PNG / JPG / WEBP / GIF, max 5&nbsp;MB. Shown at the top of the opening card.</small>
+        </label>
+        <% if (row.image_path) { %>
+        <div class="gwa-field gwa-col-6">
+          <span>Current image</span>
+          <img src="/uploads/<%= row.image_path.split('/').pop() %>" alt="Current image" style="max-height:64px;width:auto;border:1px solid var(--border);border-radius:8px;padding:6px;background:#fff">
+          <label class="gwa-field--inline" style="padding-top:8px"><input type="checkbox" name="remove_image" value="1"><span>Remove image on save</span></label>
+        </div>
+        <% } %>
         <label class="gwa-field gwa-col-3 gwa-field--inline">
           <input type="checkbox" name="is_published" value="1" <%= row.is_published ? 'checked' : '' %>>
           <span>Publish on site</span>

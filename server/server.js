@@ -66,6 +66,13 @@ app.use('/admin/static', express.static(path.join(__dirname, 'public'), {
   maxAge: '1h', etag: true
 }));
 
+/* Serve uploaded public images (principal logos, job images) so the admin can
+   preview them. They physically live in the static site's assets/uploads/. */
+const SITE_ROOT = path.resolve(__dirname, process.env.SITE_ROOT || '..');
+app.use('/uploads', express.static(path.join(SITE_ROOT, 'assets', 'uploads'), {
+  maxAge: '1h', etag: true
+}));
+
 /* ----- Public API: quote submissions from the static site -----
    Rate-limited (5 / min / IP) and protected by a honeypot. Any request
    where the `website` field is populated is silently accepted-then-dropped
