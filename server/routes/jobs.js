@@ -2,6 +2,7 @@ const express = require('express');
 const { db, logAudit } = require('../db');
 const { ensureCsrf, verifyCsrf } = require('../middleware/auth');
 const { writeCareers } = require('../scripts/build-pages');
+const { handleImageUpload, publicPath, removeUpload } = require('../middleware/uploads');
 
 const router = express.Router();
 
@@ -75,12 +76,12 @@ router.get('/:id/edit', ensureCsrf, function (req, res) {
 
 function typeMeta(key) { return TYPES.find(t => t.key === key) || TYPES[0]; }
 
-router.post('/new', ensureCsrf, verifyCsrf, function (req, res) {
+router.post('/new', ensureCsrf, handleImageUpload('/admin/jobs'), verifyCsrf, function (req, res) {
   const b = req.body;
   const slug = uniqueSlug((b.slug && b.slug.trim()) || slugify(b.title), null);
   const info = db.prepare(`
-    INSERT INTO jobs (slug, title, department, location, employment_type, summary, description, sort_order, is_published)
-    VALUES (@slug, @title, @department, @location, @employment_type, @summary, @description, @sort_order, @is_published)
+    INSERT INTO jobs (slug, title, department, location, employment_type, summary, description, image_path, sort_order, is_published)
+    VALUES (@slug, @title, @department, @location, @employment_type, @summary, @description, @image_path, @sort_order, @is_published)
   `).run({
     slug,
     title: (b.title || '').trim(),
@@ -89,6 +90,7 @@ router.post('/new', ensureCsrf, verifyCsrf, function (req, res) {
     employment_type: typeMeta(b.employment_type).key,
     summary: (b.summary || '').trim(),
     description: (b.description || '').trim(),
+    image_path: req.file ? publicPath(req.file.filename) : null,
     sort_order: parseInt(b.sort_order, 10) || 0,
     is_published: b.is_published ? 1 : 0
   });
@@ -97,16 +99,24 @@ router.post('/new', ensureCsrf, verifyCsrf, function (req, res) {
   res.redirect('/admin/jobs');
 });
 
-router.post('/:id/edit', ensureCsrf, verifyCsrf, function (req, res) {
+router.post('/:id/edit', ensureCsrf, handleImageUpload('/admin/jobs'), verifyCsrf, function (req, res) {
   const b = req.body;
   const row = db.prepare('SELECT * FROM jobs WHERE id = ?').get(req.params.id);
   if (!row) return res.status(404).render('error', { code: 404, msg: 'Not found', active: '' });
   const slug = uniqueSlug((b.slug && b.slug.trim()) || slugify(b.title), row.id);
+  let imagePath = row.image_path;
+  if (req.file) {
+    if (row.image_path) removeUpload(row.image_path);
+    imagePath = publicPath(req.file.filename);
+  } else if (b.remove_image) {
+    if (row.image_path) removeUpload(row.image_path);
+    imagePath = null;
+  }
   db.prepare(`
     UPDATE jobs SET
       slug = @slug, title = @title, department = @department, location = @location,
       employment_type = @employment_type, summary = @summary, description = @description,
-      sort_order = @sort_order, is_published = @is_published
+      image_path = @image_path, sort_order = @sort_order, is_published = @is_published
     WHERE id = @id
   `).run({
     id: row.id,
@@ -117,6 +127,7 @@ router.post('/:id/edit', ensureCsrf, verifyCsrf, function (req, res) {
     employment_type: typeMeta(b.employment_type).key,
     summary: (b.summary || '').trim(),
     description: (b.description || '').trim(),
+    image_path: imagePath,
     sort_order: parseInt(b.sort_order, 10) || 0,
     is_published: b.is_published ? 1 : 0
   });
@@ -126,8 +137,9 @@ router.post('/:id/edit', ensureCsrf, verifyCsrf, function (req, res) {
 });
 
 router.post('/:id/delete', ensureCsrf, verifyCsrf, function (req, res) {
-  const row = db.prepare('SELECT id, title FROM jobs WHERE id = ?').get(req.params.id);
+  const row = db.prepare('SELECT id, title, image_path FROM jobs WHERE id = ?').get(req.params.id);
   if (!row) return res.redirect('/admin/jobs');
+  if (row.image_path) removeUpload(row.image_path);
   db.prepare('DELETE FROM jobs WHERE id = ?').run(row.id);
   logAudit(req.session.user.username, 'delete', 'job', row.id, row.title);
   req.session.flash = [{ kind: 'success', msg: 'Deleted "' + row.title + '". Click Publish to update the site.' }];

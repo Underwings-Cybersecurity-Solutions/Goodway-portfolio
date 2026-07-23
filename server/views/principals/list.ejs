@@ -7,7 +7,13 @@
         <h1>Principals</h1>
         <p class="gwa-sub">Authorised international brands distributed by Goodway.</p>
       </div>
-      <a href="/admin/principals/new" class="gwa-btn gwa-btn--primary">+ New principal</a>
+      <div class="gwa-form--row">
+        <form method="post" action="/admin/principals/publish" class="gwa-inline-form">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <button type="submit" class="gwa-btn gwa-btn--ghost">Publish principals page</button>
+        </form>
+        <a href="/admin/principals/new" class="gwa-btn gwa-btn--primary">+ New principal</a>
+      </div>
     </header>
     <%- include('../partials/flash') %>
     <section class="gwa-card">
