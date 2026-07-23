@@ -200,6 +200,18 @@ function renderJournalList() {
   }).join('\n\n') + '\n\n          ';
 }
 
+/* The site-wide footer, read from index.html (single source of truth) and
+   re-pathed with ../ for pages inside the journal/ subfolder. Keeps every
+   generated post page's footer identical to the rest of the site. */
+function subFooter() {
+  try {
+    const idx = fs.readFileSync(path.join(SITE_ROOT, 'index.html'), 'utf8');
+    const m = idx.match(/<footer class="footer-section">[\s\S]*?<\/footer>/);
+    if (!m) return '';
+    return m[0].replace(/(href|src)="(?!https?:|mailto:|tel:|#|\.\.\/|\/)([^"]+)"/g, '$1="../$2"');
+  } catch (e) { return ''; }
+}
+
 /* A complete journal/<slug>.html article page, generated from a post row. */
 function renderPostPage(p) {
   const d = fmtDate(p.published_date);
@@ -228,31 +240,7 @@ function renderPostPage(p) {
     '    </div></div>',
     '  </div>'
   ].join('\n');
-  const footer = [
-    '  <footer class="footer">',
-    '    <div class="container"><div class="footer-wrap">',
-    '      <div class="footer-company">',
-    '        <div class="company-description"><a href="../index.html" class="footer-logo-link" aria-label="Goodway — back to homepage"><img src="../images/goodway-logo.png" loading="lazy" width="160" alt="Good Way General Trading"></a>',
-    '          <div class="paragraph regular-light-grey"><strong>Good Way General Trading</strong> &mdash; a national establishment with international expertise since 2014.</div>',
-    '        </div>',
-    '      </div>',
-    '      <div class="footer-menu"><div class="div-block-3">',
-    '        <div class="menu-quick-links">',
-    '          <div class="paragraph bold-white">Quick Links</div>',
-    '          <a href="../about.html" class="footer-link">About</a>',
-    '          <a href="../principals.html" class="footer-link">Principals</a>',
-    '          <a href="../industries.html" class="footer-link">Industries</a>',
-    '          <a href="../journal.html" class="footer-link">Journal</a>',
-    '          <a href="../careers.html" class="footer-link">Careers</a>',
-    '          <a href="../contact.html" class="footer-link">Contact</a>',
-    '        </div>',
-    '      </div></div>',
-    '      <div class="footer-bottom">',
-    '        <div class="paragraph regular-gainsboro">&copy; 2026 Good Way General Trading. All Rights Reserved. &middot; <a href="../privacy.html" class="footer-link footer-link--inline">Privacy</a> &middot; <a href="../terms.html" class="footer-link footer-link--inline">Terms</a></div>',
-    '      </div>',
-    '    </div></div>',
-    '  </footer>'
-  ].join('\n');
+  const footer = subFooter();
   return [
     '<!DOCTYPE html>',
     '<html lang="en">',
