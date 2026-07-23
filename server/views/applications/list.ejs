@@ -40,7 +40,7 @@
               <td><%= r.job_title || '—' %></td>
               <td><a href="mailto:<%= r.email %>"><%= r.email %></a></td>
               <td><%= r.phone || '—' %></td>
-              <td><% if (r.cv_stored_name) { %><a href="/admin/applications/<%= r.id %>/cv">CV</a><% } else { %><span class="gwa-muted">—</span><% } %></td>
+              <td><% if (r.cv_stored_name) { %><a href="/admin/applications/<%= r.id %>/cv" target="_blank" rel="noopener">View</a><% } else { %><span class="gwa-muted">—</span><% } %></td>
               <td><span class="gwa-pill gwa-pill--<%= r.status %>"><%= r.status %></span></td>
             </tr>
           <% }); %>

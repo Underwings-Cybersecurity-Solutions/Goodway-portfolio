@@ -44,7 +44,14 @@ router.get('/export.csv', function (_req, res) {
 });
 
 /* Stream the stored CV — login-gated (this router is mounted behind requireLogin).
-   Files live outside the web root and are never served statically. */
+   Files live outside the web root and are never served statically.
+   Default: inline (preview in the browser tab). ?dl=1: force download.
+   Note: browsers preview PDFs inline; .doc/.docx will download regardless. */
+const CV_MIME = {
+  '.pdf':  'application/pdf',
+  '.doc':  'application/msword',
+  '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+};
 router.get('/:id/cv', function (req, res) {
   const row = db.prepare('SELECT cv_stored_name, cv_original_name FROM applications WHERE id = ?').get(req.params.id);
   if (!row || !row.cv_stored_name) return res.status(404).render('error', { code: 404, msg: 'No CV on file for this application', active: '' });
@@ -54,8 +61,15 @@ router.get('/:id/cv', function (req, res) {
   if (!full.startsWith(CV_DIR) || !fs.existsSync(full)) {
     return res.status(404).render('error', { code: 404, msg: 'CV file missing on disk', active: '' });
   }
-  logAudit(req.session.user.username, 'download-cv', 'application', req.params.id, row.cv_original_name || safe);
-  res.download(full, row.cv_original_name || safe);
+  const download = req.query.dl === '1';
+  logAudit(req.session.user.username, download ? 'download-cv' : 'preview-cv', 'application', req.params.id, row.cv_original_name || safe);
+  if (download) return res.download(full, row.cv_original_name || safe);
+  /* Inline preview */
+  const ext = path.extname(safe).toLowerCase();
+  const niceName = (row.cv_original_name || safe).replace(/"/g, '');
+  res.setHeader('Content-Type', CV_MIME[ext] || 'application/octet-stream');
+  res.setHeader('Content-Disposition', 'inline; filename="' + niceName + '"');
+  fs.createReadStream(full).pipe(res);
 });
 
 router.get('/:id', ensureCsrf, function (req, res) {

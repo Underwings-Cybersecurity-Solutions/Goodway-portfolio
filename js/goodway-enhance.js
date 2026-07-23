@@ -2202,18 +2202,24 @@
     statusEl.className = 'gw-apply__status' + (kind ? ' is-' + kind : '');
   }
 
-  /* Apply buttons live inside the published openings block. Delegate so it
-     works no matter how many cards were rendered. */
+  /* The form stays hidden until an Apply trigger is clicked. Triggers are the
+     per-job "Apply for this role" buttons (inside the published openings block)
+     and the general "Send us your CV" button ([data-open-apply]). Delegated so
+     it works no matter how many cards were rendered. */
+  var formSection = doc.getElementById('apply');
   doc.addEventListener('click', function (e) {
-    var btn = e.target.closest ? e.target.closest('.gw-job__apply') : null;
+    var btn = e.target.closest ? e.target.closest('.gw-job__apply, [data-open-apply]') : null;
     if (!btn) return;
-    if (positionInput) positionInput.value = btn.getAttribute('data-job-title') || '';
+    var title = btn.getAttribute('data-job-title') || '';
+    if (positionInput) positionInput.value = title;
     if (jobIdInput) jobIdInput.value = btn.getAttribute('data-job-id') || '';
-    var apply = doc.getElementById('apply');
-    if (apply) apply.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (formSection) {
+      formSection.hidden = false;                       // reveal the form
+      formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
     var nameField = form.querySelector('input[name="name"]');
     if (nameField) setTimeout(function () { nameField.focus(); }, 350);
-    setStatus('Applying for: ' + (btn.getAttribute('data-job-title') || 'this role'), 'ok');
+    setStatus(title ? 'Applying for: ' + title : 'Send us your CV — fill in your details below.', 'ok');
   });
 
   function fallbackToMailto() {

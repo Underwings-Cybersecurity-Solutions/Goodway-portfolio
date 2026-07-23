@@ -7,7 +7,13 @@
         <h1>Careers</h1>
         <p class="gwa-sub">Job openings shown on careers.html. Publish to update the live page.</p>
       </div>
-      <a href="/admin/jobs/new" class="gwa-btn gwa-btn--primary">+ New opening</a>
+      <div class="gwa-form--row">
+        <form method="post" action="/admin/jobs/publish" class="gwa-inline-form">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <button type="submit" class="gwa-btn gwa-btn--ghost">Publish careers page</button>
+        </form>
+        <a href="/admin/jobs/new" class="gwa-btn gwa-btn--primary">+ New opening</a>
+      </div>
     </header>
     <%- include('../partials/flash') %>
     <section class="gwa-card">

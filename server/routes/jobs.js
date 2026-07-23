@@ -1,8 +1,30 @@
 const express = require('express');
 const { db, logAudit } = require('../db');
 const { ensureCsrf, verifyCsrf } = require('../middleware/auth');
+const { writeCareers } = require('../scripts/build-pages');
 
 const router = express.Router();
+
+/* Careers-only publish — regenerates ONLY careers.html between its markers.
+   Deliberately does NOT call rebuildAll(), so posting a job can never alter
+   principals.html or industries.html. */
+router.post('/publish', ensureCsrf, verifyCsrf, function (req, res) {
+  try {
+    const written = writeCareers();
+    const n = db.prepare('SELECT COUNT(*) AS n FROM jobs WHERE is_published = 1').get().n;
+    logAudit(req.session.user.username, 'publish', 'careers', null, 'jobs=' + n);
+    req.session.flash = [{
+      kind: written ? 'success' : 'error',
+      msg: written
+        ? 'Careers page published — ' + n + ' opening' + (n === 1 ? '' : 's') + ' now live. Nothing else was changed.'
+        : 'careers.html not found on the site — nothing was published.'
+    }];
+  } catch (e) {
+    console.error(e);
+    req.session.flash = [{ kind: 'error', msg: 'Publish failed: ' + e.message }];
+  }
+  res.redirect('/admin/jobs');
+});
 
 const TYPES = [
   { key: 'full-time', label: 'Full-time' },

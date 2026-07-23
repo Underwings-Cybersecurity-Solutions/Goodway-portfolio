@@ -16,9 +16,12 @@
   <link href="images/goodway-logo.png" rel="shortcut icon"><link href="images/goodway-logo.png" rel="apple-touch-icon"><link href="site.webmanifest" rel="manifest"><meta name="theme-color" content="#0e1a2b"><meta name="robots" content="index,follow"><meta name="twitter:card" content="summary_large_image"><meta property="og:type" content="website">
   <style>
     /* Careers-specific styles — scoped so the shared minified CSS is untouched. */
-    .gw-careers{padding:3.5rem 0 4.5rem}
-    .gw-careers__intro{max-width:60ch;margin:0 0 2.5rem}
-    .gw-careers__intro p{color:#4a5568;font-size:1.05rem;line-height:1.7}
+    .gw-careers{padding:2.5rem 0 4rem}
+    .gw-careers__intro{max-width:62ch;margin:0 0 2rem}
+    .gw-careers__eyebrow{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;color:#C9A961;margin:0 0 .5rem}
+    .gw-careers__h{font-family:'Fraunces',serif;font-weight:600;color:#0e1a2b;font-size:1.85rem;line-height:1.2;margin:0 0 .7rem}
+    .gw-careers__intro p{color:#4a5568;font-size:1.05rem;line-height:1.7;margin:0}
+    .gw-careers__openings-h{font-family:'Fraunces',serif;font-weight:600;color:#0e1a2b;font-size:1.55rem;margin:0 0 1.25rem}
     .gw-careers__grid{display:grid;gap:1.25rem}
     @media(min-width:720px){.gw-careers__grid{grid-template-columns:1fr 1fr}}
     .gw-job{border:1px solid #e6e8ec;border-radius:14px;padding:1.5rem 1.6rem;background:#fff;display:flex;flex-direction:column;gap:.6rem;box-shadow:0 1px 2px rgba(14,26,43,.04)}
@@ -59,6 +62,9 @@
     .gw-apply__status{grid-column:1/-1;margin:0;font-size:.95rem;min-height:1.2em}
     .gw-apply__status.is-ok{color:#8fe3b0}
     .gw-apply__status.is-err{color:#ff9b9b}
+    .gw-apply[hidden]{display:none}
+    .gw-careers__applybar{margin-top:2rem;text-align:center}
+    .gw-careers__applybar .gw-job__apply{align-self:center;font-size:1rem;padding:.85rem 1.8rem}
   </style>
 </head>
 <body>
@@ -95,6 +101,8 @@
         </div>
         <a href="industries.html" class="nav-link w-nav-link">Industries</a>
         <a href="journal.html" class="nav-link w-nav-link">Journal</a>
+        <a href="careers.html" aria-current="page" class="nav-link w-nav-link w--current">Careers</a>
+        <a href="careers.html" aria-current="page" class="nav-link w-nav-link w--current">Careers</a>
       </div><div class="button-menu"><a href="contact.html" class="button-outline w-inline-block"><div class="p1-default">Contact Us</div></a></div></nav>
       <div class="menu-button w-nav-button"><div class="menu-icon-line"><div class="menu-line-top"></div><div class="menu-line-middle"></div><div class="menu-line-bottom"></div></div></div>
     </div></div>
@@ -118,12 +126,12 @@
   <section class="gw-careers">
     <div class="container">
       <div class="gw-careers__intro">
-        <div class="paragraph bold-light-green">// WHY JOIN GOODWAY</div>
-        <h3 class="h3-default pale-lime">A national company with international standards</h3>
+        <div class="gw-careers__eyebrow">Why join Goodway</div>
+        <h3 class="gw-careers__h">A national company with international standards</h3>
         <p>Since 2014 we've supplied Abu Dhabi's most demanding industries — with a reputation for a progressive, forward-looking approach. We invest in our people: real responsibility early, exposure to global principals, and a stable, licensed UAE establishment behind you.</p>
       </div>
 
-      <h2 id="openings" class="h3-default pale-lime" style="margin-bottom:1.5rem">Current openings</h2>
+      <h2 id="openings" class="gw-careers__openings-h">Current openings</h2>
       <div class="gw-careers__grid">
         <!-- GW-CAREERS-START -->
         <div class="gw-careers__empty">
@@ -133,8 +141,12 @@
         <!-- GW-CAREERS-END -->
       </div>
 
-      <!-- Application form -->
-      <section class="gw-apply" id="apply" aria-labelledby="apply-title">
+      <div class="gw-careers__applybar">
+        <button type="button" class="gw-job__apply" data-open-apply>Send us your CV</button>
+      </div>
+
+      <!-- Application form (hidden until an Apply button is clicked) -->
+      <section class="gw-apply" id="apply" aria-labelledby="apply-title" hidden>
         <div class="gw-apply__head">
           <h2 id="apply-title">Apply now</h2>
           <p>Fill in your details and attach your CV (PDF or Word, up to 5 MB). If you're applying for a specific role, click "Apply for this role" on an opening above and we'll fill the position in for you.</p>

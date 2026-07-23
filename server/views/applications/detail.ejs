@@ -20,7 +20,8 @@
         <div><dt>Mobile</dt><dd><% if (row.phone) { %><a href="tel:<%= row.phone.replace(/\s/g, '') %>"><%= row.phone %></a><% } else { %>—<% } %></dd></div>
         <div><dt>CV</dt><dd>
           <% if (row.cv_stored_name) { %>
-            <a href="/admin/applications/<%= row.id %>/cv" class="gwa-btn gwa-btn--ghost">Download <%= row.cv_original_name || 'CV' %></a>
+            <a href="/admin/applications/<%= row.id %>/cv" target="_blank" rel="noopener" class="gwa-btn gwa-btn--ghost">Preview</a>
+            <a href="/admin/applications/<%= row.id %>/cv?dl=1" class="gwa-btn gwa-btn--ghost">Download <%= row.cv_original_name || 'CV' %></a>
           <% } else { %>
             <span class="gwa-muted">No CV attached</span>
           <% } %>
