@@ -7,6 +7,7 @@
  */
 require('dotenv').config();
 const path = require('path');
+const crypto = require('crypto');
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
@@ -50,7 +51,12 @@ app.use(function (req, res, next) {
   res.locals.flash = req.session.flash || [];
   req.session.flash = [];
   res.locals.user = req.session.user || null;
-  res.locals.csrf = req.session.csrf || '';
+  /* Mint the CSRF token here (before any template reads res.locals.csrf) so
+     the very first page render on a fresh session carries a valid token.
+     Previously the token was created later by the route-level ensureCsrf,
+     leaving the first login form's _csrf empty → guaranteed 403 on first submit. */
+  if (!req.session.csrf) req.session.csrf = crypto.randomBytes(24).toString('hex');
+  res.locals.csrf = req.session.csrf;
   next();
 });
 
