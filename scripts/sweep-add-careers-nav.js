@@ -32,8 +32,9 @@ for (const file of walk(ROOT, [])) {
   let html = fs.readFileSync(file, 'utf8');
   const isCareers = path.basename(file) === 'careers.html';
 
-  /* Already has a careers nav link → skip (idempotent). */
-  if (/href="(?:\.\.\/)?careers\.html" class="nav-link/.test(html)) { skipped++; continue; }
+  /* Already has a careers nav link → skip (idempotent). Matches both the plain
+     and the current-page (aria-current + w--current) variants. */
+  if (/href="(?:\.\.\/)?careers\.html"[^>]*class="nav-link/.test(html)) { skipped++; continue; }
   if (!NAV_RE.test(html)) { continue; }
   NAV_RE.lastIndex = 0;
 
