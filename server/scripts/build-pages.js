@@ -122,7 +122,7 @@ function renderCareersList() {
       (metaBits ? '          <div class="gw-job__meta">' + metaBits + '</div>' : ''),
       '          <p class="gw-job__summary">' + esc(j.summary) + '</p>',
       details +
-      '          <button type="button" class="gw-job__apply" data-job-id="' + j.id + '" data-job-title="' + escAttr(j.title) + '">Apply for this role</button>',
+      '          <button type="button" class="gw-job__apply" data-job-slug="' + escAttr(j.slug) + '" data-job-title="' + escAttr(j.title) + '">Apply for this role</button>',
       '        </article>'
     ].filter(Boolean).join('\n');
   }).join('\n\n') + '\n      ';

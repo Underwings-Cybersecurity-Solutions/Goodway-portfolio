@@ -22,7 +22,7 @@ Prereqs before you run the script:
 Then on the server:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Gowtham14863205/goodway-ae/main/deploy/bootstrap.sh -o bootstrap.sh
+curl -fsSL https://raw.githubusercontent.com/Underwings-Cybersecurity-Solutions/Goodway-portfolio/main/deploy/bootstrap.sh -o bootstrap.sh
 sudo bash bootstrap.sh
 ```
 

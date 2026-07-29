@@ -2,15 +2,15 @@
 # Goodway — one-shot server bootstrap (Ubuntu 22.04 / 24.04).
 # Run as a sudoer on a fresh VPS. Idempotent — re-running is safe.
 #
-#   curl -fsSL https://raw.githubusercontent.com/Gowtham14863205/goodway-ae/main/deploy/bootstrap.sh | sudo bash
-# or, after cloning the repo to /var/www/goodway:
+#   curl -fsSL https://raw.githubusercontent.com/Underwings-Cybersecurity-Solutions/Goodway-portfolio/main/deploy/bootstrap.sh | sudo bash
+# or, after cloning the repo to /var/www/goodway/site:
 #   sudo bash /var/www/goodway/site/deploy/bootstrap.sh
 set -euo pipefail
 
 DOMAIN="goodway.ae"
-REPO_URL="https://github.com/Gowtham14863205/goodway-ae.git"
+REPO_URL="https://github.com/Underwings-Cybersecurity-Solutions/Goodway-portfolio.git"
 REPO_ROOT="/var/www/goodway"
-SITE_DIR="$REPO_ROOT/site"
+SITE_DIR="$REPO_ROOT/site"   # the repo (site root) is cloned here; nginx + pm2 expect this path
 NODE_MAJOR="20"
 
 say() { printf "\n\033[1;36m==> %s\033[0m\n" "$*"; }
@@ -35,14 +35,14 @@ if ! command -v pm2 >/dev/null; then
   npm install -g pm2
 fi
 
-# ---------- 4. Clone or update the repo ----------
-if [[ ! -d "$REPO_ROOT/.git" ]]; then
-  say "Cloning repo into $REPO_ROOT"
+# ---------- 4. Clone or update the repo (into $SITE_DIR) ----------
+if [[ ! -d "$SITE_DIR/.git" ]]; then
+  say "Cloning repo into $SITE_DIR"
   mkdir -p "$REPO_ROOT"
-  git clone "$REPO_URL" "$REPO_ROOT"
+  git clone "$REPO_URL" "$SITE_DIR"
 else
   say "Repo exists — pulling latest"
-  git -C "$REPO_ROOT" pull --ff-only
+  git -C "$SITE_DIR" pull --ff-only
 fi
 chown -R www-data:www-data "$REPO_ROOT"
 
@@ -58,6 +58,15 @@ if [[ ! -f "$SITE_DIR/server/.env" ]]; then
   sed -i "s/^SESSION_SECRET=.*/SESSION_SECRET=$SESSION_SECRET/" "$SITE_DIR/server/.env"
   chown www-data:www-data "$SITE_DIR/server/.env"
   chmod 600 "$SITE_DIR/server/.env"
+fi
+
+# ---------- 6b. First-run database seed ----------
+# Populate the SQLite DB from the current HTML (principals, sectors, jobs) so
+# the admin's "Publish" round-trips faithfully instead of wiping those pages.
+# Runs only when the DB does not yet exist, so redeploys never overwrite edits.
+if [[ ! -f "$SITE_DIR/server/data/goodway.db" ]]; then
+  say "Seeding database from current HTML (first run only)"
+  sudo -u www-data -H bash -c "cd $SITE_DIR/server && npm run seed"
 fi
 
 # ---------- 7. Log directory ----------

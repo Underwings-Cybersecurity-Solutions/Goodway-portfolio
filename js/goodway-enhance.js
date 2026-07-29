@@ -2192,7 +2192,7 @@
   var statusEl = form.querySelector('.gw-apply__status');
   var submit = form.querySelector('.gw-apply__submit');
   var positionInput = form.querySelector('input[name="job_title"]');
-  var jobIdInput = form.querySelector('input[name="job_id"]');
+  var jobIdInput = form.querySelector('input[name="job_slug"]');
   var MAX_BYTES = 5 * 1024 * 1024;
   var OK_EXT = ['.pdf', '.doc', '.docx'];
 
@@ -2212,7 +2212,7 @@
     if (!btn) return;
     var title = btn.getAttribute('data-job-title') || '';
     if (positionInput) positionInput.value = title;
-    if (jobIdInput) jobIdInput.value = btn.getAttribute('data-job-id') || '';
+    if (jobIdInput) jobIdInput.value = btn.getAttribute('data-job-slug') || '';
     if (formSection) {
       formSection.hidden = false;                       // reveal the form
       formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });

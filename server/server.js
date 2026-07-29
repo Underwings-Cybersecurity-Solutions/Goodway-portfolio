@@ -173,10 +173,10 @@ app.post('/api/applications', applicationsLimiter, function (req, res) {
     if (!name || !email) { cleanup(); return res.status(400).json({ ok: false, error: 'Name and email are required.' }); }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { cleanup(); return res.status(400).json({ ok: false, error: 'Invalid email' }); }
 
-    /* Resolve the job (optional). A valid job_id snapshots its title. */
+    /* Resolve the job by slug (stable across re-seeds). Snapshots its title. */
     let jobId = null, jobTitle = String(b.job_title || '').slice(0, 200).trim();
-    if (b.job_id && /^\d+$/.test(String(b.job_id))) {
-      const job = db.prepare('SELECT id, title FROM jobs WHERE id = ?').get(parseInt(b.job_id, 10));
+    if (b.job_slug && String(b.job_slug).trim()) {
+      const job = db.prepare('SELECT id, title FROM jobs WHERE slug = ?').get(String(b.job_slug).trim());
       if (job) { jobId = job.id; if (!jobTitle) jobTitle = job.title; }
     }
 
