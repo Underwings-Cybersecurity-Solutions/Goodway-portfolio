@@ -108,6 +108,42 @@ function parseIndustriesHtml() {
   return items;
 }
 
+/* ---------- Careers parsing (managed job cards on careers.html) ---------- */
+function parseCareersHtml() {
+  const file = path.join(SITE_ROOT, 'careers.html');
+  if (!fs.existsSync(file)) return [];
+  const html = fs.readFileSync(file, 'utf8');
+  const start = html.indexOf('<!-- GW-CAREERS-START -->');
+  const end = html.indexOf('<!-- GW-CAREERS-END -->');
+  if (start === -1 || end === -1 || end < start) return [];
+  const block = html.slice(start, end);
+  const TYPE_KEY = { 'Full-time': 'full-time', 'Part-time': 'part-time', 'Contract': 'contract', 'Internship': 'internship' };
+  const jobs = [];
+  const re = /<article class="gw-job" id="job-([^"]+)">([\s\S]*?)<\/article>/g;
+  let m, order = 10;
+  while ((m = re.exec(block)) !== null) {
+    const slug = m[1], inner = m[2];
+    const title = decodePlain((inner.match(/<h3 class="gw-job__title">([\s\S]*?)<\/h3>/) || [])[1] || '').trim();
+    const typeLabel = (inner.match(/<span class="gw-job__type">([^<]*)<\/span>/) || [])[1] || 'Full-time';
+    const metaParts = ((inner.match(/<div class="gw-job__meta">([\s\S]*?)<\/div>/) || [])[1] || '')
+      .split('&middot;').map(s => decodePlain(s).trim());
+    const summary = decodePlain((inner.match(/<p class="gw-job__summary">([\s\S]*?)<\/p>/) || [])[1] || '').trim();
+    const description = ((inner.match(/<div class="gw-job__desc">([\s\S]*?)<\/div>\s*<\/details>/) || [])[1] || '').trim();
+    jobs.push({
+      slug: slug,
+      title: title,
+      department: metaParts[0] || '',
+      location: metaParts[1] || '',
+      employment_type: TYPE_KEY[typeLabel.trim()] || 'full-time',
+      summary: summary,
+      description: description,        /* HTML — keep raw */
+      sort_order: order
+    });
+    order += 10;
+  }
+  return jobs;
+}
+
 /* ---------- Run ---------- */
 function slugify(s) {
   return String(s).toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
@@ -115,8 +151,9 @@ function slugify(s) {
 
 const principals = parsePrincipalsHtml();
 const sectors    = parseIndustriesHtml();
+const jobs       = parseCareersHtml();
 
-console.log('Parsed ' + principals.length + ' principals + ' + sectors.length + ' sectors.');
+console.log('Parsed ' + principals.length + ' principals + ' + sectors.length + ' sectors + ' + jobs.length + ' jobs.');
 
 const tx = db.transaction(function () {
   db.exec('DELETE FROM principals; DELETE FROM sectors;');
@@ -150,6 +187,13 @@ const tx = db.transaction(function () {
             @cta_label, @icon_svg, @image_path, @image_alt, @sort_order, 1)
   `);
   sectors.forEach(function (s) { insS.run(s); });
+
+  db.exec('DELETE FROM jobs;');
+  const insJ = db.prepare(`
+    INSERT INTO jobs (slug, title, department, location, employment_type, summary, description, sort_order, is_published)
+    VALUES (@slug, @title, @department, @location, @employment_type, @summary, @description, @sort_order, 1)
+  `);
+  jobs.forEach(function (j) { insJ.run(j); });
 });
 tx();
 
