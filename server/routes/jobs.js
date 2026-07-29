@@ -62,7 +62,7 @@ router.get('/', ensureCsrf, function (_req, res) {
 router.get('/new', ensureCsrf, function (_req, res) {
   res.render('jobs/edit', {
     row: { id: null, slug: '', title: '', department: '', location: '', employment_type: 'full-time',
-           summary: '', description: '', sort_order: 0, is_published: 1 },
+           closing_date: '', summary: '', description: '', sort_order: 0, is_published: 1 },
     types: TYPES,
     active: 'jobs'
   });
@@ -80,14 +80,15 @@ router.post('/new', ensureCsrf, handleImageUpload('/admin/jobs'), verifyCsrf, fu
   const b = req.body;
   const slug = uniqueSlug((b.slug && b.slug.trim()) || slugify(b.title), null);
   const info = db.prepare(`
-    INSERT INTO jobs (slug, title, department, location, employment_type, summary, description, image_path, sort_order, is_published)
-    VALUES (@slug, @title, @department, @location, @employment_type, @summary, @description, @image_path, @sort_order, @is_published)
+    INSERT INTO jobs (slug, title, department, location, employment_type, closing_date, summary, description, image_path, sort_order, is_published)
+    VALUES (@slug, @title, @department, @location, @employment_type, @closing_date, @summary, @description, @image_path, @sort_order, @is_published)
   `).run({
     slug,
     title: (b.title || '').trim(),
     department: (b.department || '').trim(),
     location: (b.location || '').trim(),
     employment_type: typeMeta(b.employment_type).key,
+    closing_date: (b.closing_date || '').trim(),
     summary: (b.summary || '').trim(),
     description: (b.description || '').trim(),
     image_path: req.file ? publicPath(req.file.filename) : null,
@@ -115,7 +116,7 @@ router.post('/:id/edit', ensureCsrf, handleImageUpload('/admin/jobs'), verifyCsr
   db.prepare(`
     UPDATE jobs SET
       slug = @slug, title = @title, department = @department, location = @location,
-      employment_type = @employment_type, summary = @summary, description = @description,
+      employment_type = @employment_type, closing_date = @closing_date, summary = @summary, description = @description,
       image_path = @image_path, sort_order = @sort_order, is_published = @is_published
     WHERE id = @id
   `).run({
@@ -125,6 +126,7 @@ router.post('/:id/edit', ensureCsrf, handleImageUpload('/admin/jobs'), verifyCsr
     department: (b.department || '').trim(),
     location: (b.location || '').trim(),
     employment_type: typeMeta(b.employment_type).key,
+    closing_date: (b.closing_date || '').trim(),
     summary: (b.summary || '').trim(),
     description: (b.description || '').trim(),
     image_path: imagePath,

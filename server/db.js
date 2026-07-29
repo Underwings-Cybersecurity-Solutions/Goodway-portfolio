@@ -91,6 +91,7 @@ db.exec(`
     department      TEXT    NOT NULL DEFAULT '',
     location        TEXT    NOT NULL DEFAULT '',
     employment_type TEXT    NOT NULL DEFAULT 'full-time',
+    closing_date    TEXT    NOT NULL DEFAULT '',
     summary         TEXT    NOT NULL DEFAULT '',
     description     TEXT    NOT NULL DEFAULT '',
     image_path      TEXT    DEFAULT NULL,
@@ -175,6 +176,7 @@ function ensureColumn(table, column, ddl) {
 ensureColumn('principals', 'cta_label', "TEXT NOT NULL DEFAULT 'See products in division'");
 ensureColumn('principals', 'image_path', 'TEXT DEFAULT NULL');
 ensureColumn('jobs', 'image_path', 'TEXT DEFAULT NULL');
+ensureColumn('jobs', 'closing_date', "TEXT NOT NULL DEFAULT ''");
 ensureColumn('sectors', 'image_path', 'TEXT DEFAULT NULL');
 ensureColumn('sectors', 'image_alt', 'TEXT DEFAULT NULL');
 

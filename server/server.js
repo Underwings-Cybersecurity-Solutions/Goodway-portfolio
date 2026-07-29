@@ -18,7 +18,7 @@ const { db } = require('./db');
 const auth = require('./middleware/auth');
 const rateLimit = require('./middleware/ratelimit');
 const security = require('./middleware/security');
-const { notifyNewLead, notifyNewApplication } = require('./lib/notify');
+const { notifyNewLead, notifyNewApplication, notifyApplicant } = require('./lib/notify');
 
 const app = express();
 const PORT = parseInt(process.env.PORT, 10) || 4010;
@@ -199,7 +199,9 @@ app.post('/api/applications', applicationsLimiter, function (req, res) {
         user_agent: (req.headers['user-agent'] || '').toString().slice(0, 300)
       };
       const out = stmt.run(row);
-      notifyNewApplication(Object.assign({ id: out.lastInsertRowid }, row)).catch(e => console.error('notify failed', e));
+      const full = Object.assign({ id: out.lastInsertRowid }, row);
+      notifyNewApplication(full).catch(e => console.error('notify failed', e));       // alert the client
+      notifyApplicant(full).catch(e => console.error('applicant ack failed', e));     // auto-reply to the applicant
       res.json({ ok: true, id: out.lastInsertRowid });
     } catch (e) {
       console.error('application insert failed', e);

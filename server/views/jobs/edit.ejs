@@ -37,6 +37,11 @@
           <input type="text" name="location" value="<%= row.location %>" maxlength="120" placeholder="Mussafah, Abu Dhabi">
         </label>
         <label class="gwa-field gwa-col-3">
+          <span>Closing date</span>
+          <input type="date" name="closing_date" value="<%= row.closing_date || '' %>">
+          <small class="gwa-hint">Optional. Shown on the card; the role auto-hides after this date.</small>
+        </label>
+        <label class="gwa-field gwa-col-3">
           <span>Slug (auto if blank)</span>
           <input type="text" name="slug" value="<%= row.slug %>" maxlength="60" pattern="[a-z0-9-]*">
         </label>
