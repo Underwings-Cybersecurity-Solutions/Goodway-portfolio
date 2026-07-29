@@ -110,8 +110,12 @@ function renderCareersList() {
         '            <div class="gw-job__desc">' + j.description + '</div>\n' +
         '          </details>\n'
       : '';
+    const closesAttr = j.closing_date ? ' data-closes="' + escAttr(j.closing_date) + '"' : '';
+    const closesLine = j.closing_date
+      ? '          <div class="gw-job__closes">Applications close ' + esc(fmtDate(j.closing_date).full) + '</div>'
+      : '';
     return [
-      '        <article class="gw-job" id="job-' + escAttr(j.slug) + '">',
+      '        <article class="gw-job" id="job-' + escAttr(j.slug) + '"' + closesAttr + '>',
       (j.image_path
         ? '          <img class="gw-job__img" src="' + escAttr(j.image_path) + '" alt="' + escAttr(j.title) + '" loading="lazy">'
         : ''),
@@ -120,6 +124,7 @@ function renderCareersList() {
       '            <span class="gw-job__type">' + typeLabel + '</span>',
       '          </div>',
       (metaBits ? '          <div class="gw-job__meta">' + metaBits + '</div>' : ''),
+      closesLine,
       '          <p class="gw-job__summary">' + esc(j.summary) + '</p>',
       details +
       '          <div class="gw-job__actions">' +

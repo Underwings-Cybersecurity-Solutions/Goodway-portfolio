@@ -119,10 +119,11 @@ function parseCareersHtml() {
   const block = html.slice(start, end);
   const TYPE_KEY = { 'Full-time': 'full-time', 'Part-time': 'part-time', 'Contract': 'contract', 'Internship': 'internship' };
   const jobs = [];
-  const re = /<article class="gw-job" id="job-([^"]+)">([\s\S]*?)<\/article>/g;
+  const re = /<article class="gw-job" id="job-([^"]+)"([^>]*)>([\s\S]*?)<\/article>/g;
   let m, order = 10;
   while ((m = re.exec(block)) !== null) {
-    const slug = m[1], inner = m[2];
+    const slug = m[1], attrs = m[2] || '', inner = m[3];
+    const closing_date = (attrs.match(/data-closes="([^"]+)"/) || [])[1] || '';
     const title = decodePlain((inner.match(/<h3 class="gw-job__title">([\s\S]*?)<\/h3>/) || [])[1] || '').trim();
     const typeLabel = (inner.match(/<span class="gw-job__type">([^<]*)<\/span>/) || [])[1] || 'Full-time';
     const metaParts = ((inner.match(/<div class="gw-job__meta">([\s\S]*?)<\/div>/) || [])[1] || '')
@@ -135,6 +136,7 @@ function parseCareersHtml() {
       department: metaParts[0] || '',
       location: metaParts[1] || '',
       employment_type: TYPE_KEY[typeLabel.trim()] || 'full-time',
+      closing_date: closing_date,
       summary: summary,
       description: description,        /* HTML — keep raw */
       sort_order: order
@@ -190,8 +192,8 @@ const tx = db.transaction(function () {
 
   db.exec('DELETE FROM jobs;');
   const insJ = db.prepare(`
-    INSERT INTO jobs (slug, title, department, location, employment_type, summary, description, sort_order, is_published)
-    VALUES (@slug, @title, @department, @location, @employment_type, @summary, @description, @sort_order, 1)
+    INSERT INTO jobs (slug, title, department, location, employment_type, closing_date, summary, description, sort_order, is_published)
+    VALUES (@slug, @title, @department, @location, @employment_type, @closing_date, @summary, @description, @sort_order, 1)
   `);
   jobs.forEach(function (j) { insJ.run(j); });
 });

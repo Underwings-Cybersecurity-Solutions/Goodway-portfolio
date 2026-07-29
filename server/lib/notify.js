@@ -50,20 +50,20 @@ function renderBody(lead) {
   return { subject, text, html };
 }
 
-/* ---- Providers ---- */
-async function sendResend(body) {
+/* ---- Providers (default recipient is NOTIFY_TO; pass `to` to override) ---- */
+async function sendResend(body, to) {
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + RESEND_KEY,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ from: FROM, to: [TO], subject: body.subject, html: body.html, text: body.text })
+    body: JSON.stringify({ from: FROM, to: [to || TO], subject: body.subject, html: body.html, text: body.text })
   });
   if (!r.ok) throw new Error('Resend ' + r.status + ' ' + (await r.text()).slice(0, 200));
 }
 
-async function sendPostmark(body) {
+async function sendPostmark(body, to) {
   const r = await fetch('https://api.postmarkapp.com/email', {
     method: 'POST',
     headers: {
@@ -71,7 +71,7 @@ async function sendPostmark(body) {
       'Content-Type': 'application/json',
       'X-Postmark-Server-Token': POSTMARK_KEY
     },
-    body: JSON.stringify({ From: FROM, To: TO, Subject: body.subject, HtmlBody: body.html, TextBody: body.text })
+    body: JSON.stringify({ From: FROM, To: to || TO, Subject: body.subject, HtmlBody: body.html, TextBody: body.text })
   });
   if (!r.ok) throw new Error('Postmark ' + r.status + ' ' + (await r.text()).slice(0, 200));
 }
@@ -115,6 +115,29 @@ function renderApplicationBody(app) {
   return { subject, text, html };
 }
 
+/* Auto-acknowledge the applicant (sent TO the applicant's own email). No-op
+   unless an email provider is configured. */
+async function notifyApplicant(app) {
+  if (!app || !app.email) return;
+  const role = app.job_title ? ' for the ' + app.job_title + ' position' : '';
+  const subject = 'We received your application — Good Way General Trading';
+  const text =
+    'Hi ' + (app.name || 'there') + ',\n\n' +
+    'Thank you for applying' + role + ' at Good Way General Trading. ' +
+    'We have received your application and our team will review it. If your profile matches, we will be in touch.\n\n' +
+    'Good Way General Trading\nMussafah Industrial Area, M-14, Abu Dhabi, UAE\ninfo@goodway.ae';
+  const html =
+    '<p>Hi ' + escapeHtml(app.name || 'there') + ',</p>' +
+    '<p>Thank you for applying' + escapeHtml(role) + ' at <strong>Good Way General Trading</strong>. ' +
+    'We have received your application and our team will review it. If your profile matches, we will be in touch.</p>' +
+    '<p>&mdash; Good Way General Trading<br>Mussafah Industrial Area, M-14, Abu Dhabi, UAE</p>';
+  const body = { subject: subject, text: text, html: html };
+  try {
+    if (RESEND_KEY) return await sendResend(body, app.email);
+    if (POSTMARK_KEY) return await sendPostmark(body, app.email);
+  } catch (e) { console.error('applicant ack failed:', e.message); }
+}
+
 async function notifyNewApplication(app) {
   const body = renderApplicationBody(app);
   /* Local inbox log — same offline-audit behaviour as leads */
@@ -155,4 +178,4 @@ async function notifyNewLead(lead) {
   await Promise.allSettled(tasks);
 }
 
-module.exports = { notifyNewLead, notifyNewApplication };
+module.exports = { notifyNewLead, notifyNewApplication, notifyApplicant };

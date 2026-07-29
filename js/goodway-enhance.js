@@ -2183,6 +2183,18 @@
    Also wires the "Apply for this role" buttons on job cards to
    pre-fill the position + job id and scroll to the form.
    ============================================================ */
+/* Careers — hide openings whose closing date has passed. Runs client-side so a
+   static page self-expires without needing a republish. */
+(function gwCareersExpire() {
+  var cards = document.querySelectorAll('.gw-job[data-closes]');
+  if (!cards.length) return;
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  Array.prototype.forEach.call(cards, function (card) {
+    var d = new Date(card.getAttribute('data-closes') + 'T00:00:00');
+    if (!isNaN(d.getTime()) && d < today) card.style.display = 'none';
+  });
+})();
+
 (function gwCareersForm() {
   var doc = document;
   var form = doc.querySelector('form[data-gw-application]');
